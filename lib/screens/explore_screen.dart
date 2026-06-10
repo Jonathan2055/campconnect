@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../models/models.dart';
+import '../state/app_state.dart';
 import '../theme/app_theme.dart';
+import '../widgets/common.dart';
+import '../widgets/cards.dart';
 
 class ExploreScreen extends StatefulWidget {
   final bool standalone;
@@ -19,6 +24,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final state = context.watch<AppState>();
+
     return Scaffold(
       appBar: widget.standalone
           ? AppBar(leading: const BackButton(), title: const Text('Explore'))
@@ -77,9 +84,53 @@ class _ExploreScreenState extends State<ExploreScreen> {
                 },
               ),
             ),
+            const SizedBox(height: 18),
+            const Text('Recommended for you',
+                style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700)),
+            const SizedBox(height: 12),
+            ..._buildResults(state),
           ],
         ),
       ),
     );
+  }
+
+  List<Widget> _buildResults(AppState state) {
+    if (_filter == 'Clubs') {
+      final clubs = state.communities
+          .where((c) =>
+              c.name.toLowerCase().contains(_query.toLowerCase()))
+          .toList();
+      if (clubs.isEmpty) {
+        return [
+          const EmptyState(
+              icon: Icons.groups, message: 'No clubs match your search.')
+        ];
+      }
+      return clubs.map((c) => CommunityTile(community: c)).toList();
+    }
+
+    List<Post> items;
+    if (_filter == 'Events') {
+      items = state.events;
+    } else if (_filter == 'Opportunities') {
+      items = state.opportunities;
+    } else {
+      items = state.posts;
+    }
+    if (_query.isNotEmpty) {
+      items = items
+          .where((p) =>
+              p.title.toLowerCase().contains(_query.toLowerCase()))
+          .toList();
+    }
+    if (items.isEmpty) {
+      return [
+        const EmptyState(
+            icon: Icons.search_off,
+            message: 'Nothing found. Try a different search or filter.')
+      ];
+    }
+    return items.map((p) => OpportunityRow(post: p)).toList();
   }
 }
