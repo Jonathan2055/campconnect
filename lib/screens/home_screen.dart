@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../state/app_state.dart';
 import '../theme/app_theme.dart';
 import '../widgets/common.dart';
+import '../widgets/cards.dart';
 import 'communities_screen.dart';
 import 'explore_screen.dart';
 
@@ -14,6 +15,8 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final state = context.watch<AppState>();
     final user = state.currentUser;
+    final featured = state.featured;
+    final opportunities = state.opportunities;
 
     return Scaffold(
       body: SafeArea(
@@ -49,6 +52,25 @@ class HomeScreen extends StatelessWidget {
             ),
             const SizedBox(height: 18),
             const _CategoryRow(),
+            const SizedBox(height: 22),
+            SectionHeader(
+                title: 'Featured', onSeeAll: () => _goExplore(context)),
+            const SizedBox(height: 12),
+            ...featured.map((p) => Padding(
+                  padding: const EdgeInsets.only(bottom: 14),
+                  child: FeaturedCard(post: p),
+                )),
+            const SizedBox(height: 8),
+            SectionHeader(
+                title: 'Latest Opportunities',
+                onSeeAll: () => _goExplore(context)),
+            const SizedBox(height: 12),
+            if (opportunities.isEmpty)
+              const EmptyState(
+                  icon: Icons.inbox,
+                  message: 'No opportunities yet. Be the first to post one!')
+            else
+              ...opportunities.map((p) => OpportunityRow(post: p)),
           ],
         ),
       ),
