@@ -18,50 +18,139 @@ class EventDetailScreen extends StatelessWidget {
     final isOpportunity = post.type == PostType.opportunity;
 
     return Scaffold(
+      backgroundColor: AppColors.dark,
       body: SafeArea(
+        bottom: false,
         child: Column(
           children: [
-            Expanded(
-              child: ListView(
-                padding: EdgeInsets.zero,
+            // ── Gradient hero header ─────────────────────────────
+            SizedBox(
+              height: 240,
+              child: Stack(
+                fit: StackFit.expand,
                 children: [
-                  Stack(
-                    children: [
-                      GradientCover(
+                  // Gradient background
+                  DecoratedBox(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
                         colors: post.coverGradient,
-                        height: 220,
-                        radius: BorderRadius.zero,
-                        icon: isOpportunity
-                            ? Icons.workspace_premium
-                            : Icons.celebration,
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
                       ),
-                      Positioned(
-                        top: 8,
-                        left: 8,
-                        child: CircleAvatar(
-                          backgroundColor: Colors.black26,
-                          child: IconButton(
-                            icon: const Icon(Icons.arrow_back,
-                                color: Colors.white),
-                            onPressed: () => Navigator.pop(context),
-                          ),
+                    ),
+                  ),
+                  // Decorative circles
+                  Positioned(
+                    right: -40,
+                    top: -40,
+                    child: Container(
+                      width: 180,
+                      height: 180,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white.withValues(alpha: 0.08),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: -20,
+                    bottom: 10,
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white.withValues(alpha: 0.06),
+                      ),
+                    ),
+                  ),
+                  // Bottom fade to dark
+                  Positioned.fill(
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Colors.transparent,
+                            AppColors.dark.withValues(alpha: 0.6),
+                          ],
+                          stops: const [0.5, 1.0],
                         ),
                       ),
-                    ],
+                    ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(post.title,
-                            style: const TextStyle(
-                                fontSize: 24, fontWeight: FontWeight.w800)),
-                        const SizedBox(height: 4),
-                        Text('by ${post.organizer}',
-                            style: const TextStyle(
-                                color: AppColors.textSecondary)),
-                        const SizedBox(height: 14),
+                  // Back button
+                  Positioned(
+                    top: 12,
+                    left: 16,
+                    child: GestureDetector(
+                      onTap: () => Navigator.pop(context),
+                      child: Container(
+                        width: 38,
+                        height: 38,
+                        decoration: BoxDecoration(
+                          color: Colors.black.withValues(alpha: 0.3),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(Icons.arrow_back_rounded,
+                            color: Colors.white, size: 20),
+                      ),
+                    ),
+                  ),
+                  // Category badge top-right
+                  Positioned(
+                    top: 16,
+                    right: 16,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 5),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withValues(alpha: 0.3),
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                            color: Colors.white.withValues(alpha: 0.25)),
+                      ),
+                      child: Text(
+                        post.category.toUpperCase(),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 0.6,
+                        ),
+                      ),
+                    ),
+                  ),
+                  // Center icon
+                  Center(
+                    child: Icon(
+                      isOpportunity
+                          ? Icons.workspace_premium_rounded
+                          : Icons.celebration_rounded,
+                      color: Colors.white.withValues(alpha: 0.25),
+                      size: 80,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            // ── White rounded body ───────────────────────────────
+            Expanded(
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: AppColors.bg,
+                  borderRadius:
+                      BorderRadius.vertical(top: Radius.circular(28)),
+                ),
+                child: ClipRRect(
+                  borderRadius:
+                      const BorderRadius.vertical(top: Radius.circular(28)),
+                  child: ListView(
+                    padding: const EdgeInsets.fromLTRB(20, 24, 20, 24),
+                    children: [
+                      // Tags row
+                      if (post.tags.isNotEmpty)
                         Wrap(
                           spacing: 8,
                           runSpacing: 8,
@@ -70,57 +159,101 @@ class EventDetailScreen extends StatelessWidget {
                                   label: t, color: categoryColor(t)))
                               .toList(),
                         ),
-                        const SizedBox(height: 18),
-                        _infoRow(Icons.calendar_today, post.dateLabel),
-                        const SizedBox(height: 12),
-                        _infoRow(Icons.location_on, post.location),
-                        const SizedBox(height: 18),
-                        Text('About',
-                            style: const TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w700)),
-                        const SizedBox(height: 8),
-                        Text(post.description,
-                            style: const TextStyle(
-                                color: AppColors.textSecondary,
-                                height: 1.5,
-                                fontSize: 15)),
+                      const SizedBox(height: 14),
+                      // Title
+                      Text(
+                        post.title,
+                        style: const TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w800,
+                          height: 1.2,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'by ${post.organizer}',
+                        style: const TextStyle(
+                            color: AppColors.textSecondary, fontSize: 14),
+                      ),
+                      const SizedBox(height: 18),
+                      // Info cards
+                      _infoCard(
+                          Icons.calendar_today_rounded, post.dateLabel),
+                      const SizedBox(height: 8),
+                      _infoCard(
+                          Icons.location_on_rounded, post.location),
+                      const SizedBox(height: 20),
+                      // About
+                      const Text(
+                        'About',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w700),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        post.description,
+                        style: const TextStyle(
+                          color: AppColors.textSecondary,
+                          height: 1.6,
+                          fontSize: 14.5,
+                        ),
+                      ),
+                      if (!isOpportunity) ...[
                         const SizedBox(height: 20),
-                        if (!isOpportunity)
-                          Row(children: [
-                            const Icon(Icons.group,
+                        Container(
+                          padding: const EdgeInsets.all(14),
+                          decoration: BoxDecoration(
+                            color: AppColors.emerald
+                                .withValues(alpha: 0.08),
+                            borderRadius: BorderRadius.circular(14),
+                            border: Border.all(
+                                color: AppColors.emerald
+                                    .withValues(alpha: 0.2)),
+                          ),
+                          child: Row(children: [
+                            const Icon(Icons.group_rounded,
                                 size: 18, color: AppColors.emerald),
-                            const SizedBox(width: 8),
+                            const SizedBox(width: 10),
                             Text(
-                                '${state.displayedGoing(post)} going  \u2022  ${state.displayedInterested(post)} interested',
-                                style: const TextStyle(
-                                    color: AppColors.textSecondary)),
+                              '${state.displayedGoing(post)} going  ·  ${state.displayedInterested(post)} interested',
+                              style: const TextStyle(
+                                color: AppColors.emerald,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 14,
+                              ),
+                            ),
                           ]),
+                        ),
                       ],
-                    ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
+            // ── Action bar ───────────────────────────────────────
             Container(
-              padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
-              decoration: const BoxDecoration(color: AppColors.surface),
+              padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
+              decoration: const BoxDecoration(
+                color: AppColors.surface,
+                border: Border(
+                    top: BorderSide(color: AppColors.border)),
+              ),
               child: isOpportunity
                   ? GoldButton(
-                      label: going ? 'Registered \u2713' : 'Apply / Register',
+                      label: going ? 'Registered ✓' : 'Apply / Register',
                       icon: Icons.open_in_new,
                       onTap: () => _register(context, state),
                     )
                   : Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         GoldButton(
-                          label: going ? "You're Going \u2713" : 'RSVP',
+                          label: going ? "You're Going ✓" : 'RSVP — I\'m Going',
                           onTap: () => state.toggleGoing(post.id),
                         ),
                         const SizedBox(height: 10),
                         OutlineButton2(
-                          label: interested
-                              ? 'Interested \u2713'
-                              : 'Interested',
+                          label: interested ? 'Interested ✓' : 'Interested',
                           onTap: () => state.toggleInterested(post.id),
                         ),
                       ],
@@ -132,12 +265,26 @@ class EventDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _infoRow(IconData icon, String text) {
-    return Row(children: [
-      Icon(icon, size: 18, color: AppColors.emerald),
-      const SizedBox(width: 10),
-      Expanded(child: Text(text, style: const TextStyle(fontSize: 14))),
-    ]);
+  Widget _infoCard(IconData icon, String text) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppColors.border),
+      ),
+      child: Row(children: [
+        Icon(icon, size: 16, color: AppColors.emerald),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Text(
+            text,
+            style: const TextStyle(
+                fontSize: 14, fontWeight: FontWeight.w500),
+          ),
+        ),
+      ]),
+    );
   }
 
   void _register(BuildContext context, AppState state) {
