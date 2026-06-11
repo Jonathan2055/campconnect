@@ -51,40 +51,54 @@ class _MainShellState extends State<MainShell> {
       bottomNavigationBar: NavigationBar(
         selectedIndex: _index,
         onDestinationSelected: (i) => setState(() => _index = i),
+        backgroundColor: AppColors.dark,
+        indicatorColor: AppColors.emerald.withValues(alpha: 0.18),
+        surfaceTintColor: Colors.transparent,
+        shadowColor: Colors.transparent,
+        labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
         destinations: [
           const NavigationDestination(
-            icon: Icon(Icons.home_outlined),
-            selectedIcon: Icon(Icons.home_rounded),
+            icon: Icon(Icons.home_outlined, color: Colors.white54),
+            selectedIcon:
+                Icon(Icons.home_rounded, color: AppColors.emerald),
             label: 'Home',
           ),
           const NavigationDestination(
-            icon: Icon(Icons.dynamic_feed_outlined),
-            selectedIcon: Icon(Icons.dynamic_feed_rounded),
+            icon: Icon(Icons.dynamic_feed_outlined, color: Colors.white54),
+            selectedIcon:
+                Icon(Icons.dynamic_feed_rounded, color: AppColors.emerald),
             label: 'Feed',
           ),
           const NavigationDestination(
-            icon: Icon(Icons.search_outlined),
-            selectedIcon: Icon(Icons.search_rounded),
+            icon: Icon(Icons.search_outlined, color: Colors.white54),
+            selectedIcon:
+                Icon(Icons.search_rounded, color: AppColors.emerald),
             label: 'Explore',
           ),
           NavigationDestination(
             icon: unread > 0
                 ? Badge.count(
                     count: unread,
-                    child: const Icon(Icons.chat_bubble_outline_rounded),
+                    child: const Icon(Icons.chat_bubble_outline_rounded,
+                        color: Colors.white54),
                   )
-                : const Icon(Icons.chat_bubble_outline_rounded),
+                : const Icon(Icons.chat_bubble_outline_rounded,
+                    color: Colors.white54),
             selectedIcon: unread > 0
                 ? Badge.count(
                     count: unread,
-                    child: const Icon(Icons.chat_bubble_rounded),
+                    child: const Icon(Icons.chat_bubble_rounded,
+                        color: AppColors.emerald),
                   )
-                : const Icon(Icons.chat_bubble_rounded),
+                : const Icon(Icons.chat_bubble_rounded,
+                    color: AppColors.emerald),
             label: 'Chats',
           ),
           const NavigationDestination(
-            icon: Icon(Icons.person_outline_rounded),
-            selectedIcon: Icon(Icons.person_rounded),
+            icon:
+                Icon(Icons.person_outline_rounded, color: Colors.white54),
+            selectedIcon:
+                Icon(Icons.person_rounded, color: AppColors.emerald),
             label: 'Profile',
           ),
         ],
