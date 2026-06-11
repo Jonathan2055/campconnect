@@ -5,13 +5,15 @@ class AppColors {
   static const surface = Color(0xFFFFFFFF);
   static const surfaceAlt = Color(0xFFE0EFFE);
   // accent (kept as "gold" throughout the app for compatibility)
+  static const gold = Color(0xFFF59E0B); // amber/gold
+  static const goldInk = Color(0xFF78350F); // gold-on-gold
   static const emerald = Color(0xFF059669);
   static const onEmerald = Color(0xFFFFFFFF);
-  static const purple = Color(0xFF4F46E5);  // indigo
-  static const blue = Color(0xFF0EA5E9);    // sky blue
-  static const green = Color(0xFF16A34A);   // vivid green
-  static const pink = Color(0xFFF43F5E);    // rose
-  static const teal = Color(0xFF0D9488);    // teal
+  static const purple = Color(0xFF4F46E5); // indigo
+  static const blue = Color(0xFF0EA5E9); // sky blue
+  static const green = Color(0xFF16A34A); // vivid green
+  static const pink = Color(0xFFF43F5E); // rose
+  static const teal = Color(0xFF0D9488); // teal
   static const textPrimary = Color(0xFF0F172A);
   static const textSecondary = Color(0xFF64748B);
   static const border = Color(0xFFCBD5E1);
