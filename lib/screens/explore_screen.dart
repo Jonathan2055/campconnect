@@ -8,12 +8,9 @@ import '../widgets/common.dart';
 import '../widgets/cards.dart';
 
 class ExploreScreen extends StatefulWidget {
-  /// When true, the screen is pushed (shows a back button + AppBar) rather
-  /// than living inside the bottom-nav shell.
   final bool standalone;
   final String? initialFilter;
-  const ExploreScreen(
-      {super.key, this.standalone = false, this.initialFilter});
+  const ExploreScreen({super.key, this.standalone = false, this.initialFilter});
 
   @override
   State<ExploreScreen> createState() => _ExploreScreenState();
@@ -29,68 +26,142 @@ class _ExploreScreenState extends State<ExploreScreen> {
     final state = context.watch<AppState>();
 
     return Scaffold(
-      appBar: widget.standalone
-          ? AppBar(leading: const BackButton(), title: const Text('Explore'))
-          : null,
+      backgroundColor: AppColors.dark,
       body: SafeArea(
-        top: !widget.standalone,
-        child: ListView(
-          padding: const EdgeInsets.fromLTRB(20, 12, 20, 100),
+        bottom: false,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (!widget.standalone) ...[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  Text('Explore',
-                      style: TextStyle(
-                          fontSize: 26, fontWeight: FontWeight.w800)),
-                  Icon(Icons.notifications_none_rounded,
-                      color: AppColors.emerald),
+            // ── Dark header ──────────────────────────────────────
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 14, 20, 18),
+              child: Row(
+                children: [
+                  if (widget.standalone) ...[
+                    GestureDetector(
+                      onTap: () => Navigator.pop(context),
+                      child: Container(
+                        width: 38,
+                        height: 38,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.1),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(Icons.arrow_back_rounded,
+                            color: Colors.white, size: 20),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                  ],
+                  const Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Explore',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 22,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                        SizedBox(height: 2),
+                        Text(
+                          'Discover events, clubs & more',
+                          style: TextStyle(
+                            color: Colors.white54,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    width: 38,
+                    height: 38,
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.1),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(Icons.notifications_none_rounded,
+                        color: Colors.white, size: 20),
+                  ),
                 ],
               ),
-              const SizedBox(height: 16),
-            ],
-            TextField(
-              onChanged: (v) => setState(() => _query = v),
-              decoration: const InputDecoration(
-                hintText: 'Search...',
-                prefixIcon:
-                    Icon(Icons.search, color: AppColors.textSecondary),
+            ),
+            // ── White rounded body ───────────────────────────────
+            Expanded(
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: AppColors.bg,
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+                ),
+                child: ClipRRect(
+                  borderRadius:
+                      const BorderRadius.vertical(top: Radius.circular(28)),
+                  child: ListView(
+                    padding: const EdgeInsets.fromLTRB(20, 20, 20, 100),
+                    children: [
+                      // Search
+                      TextField(
+                        onChanged: (v) => setState(() => _query = v),
+                        decoration: const InputDecoration(
+                          hintText: 'Search events, opportunities…',
+                          prefixIcon: Icon(Icons.search,
+                              color: AppColors.textSecondary),
+                        ),
+                      ),
+                      const SizedBox(height: 14),
+                      // Filter chips
+                      SizedBox(
+                        height: 38,
+                        child: ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: _filters.length,
+                          separatorBuilder: (_, __) => const SizedBox(width: 8),
+                          itemBuilder: (_, i) {
+                            final f = _filters[i];
+                            final active = f == _filter;
+                            return ChoiceChip(
+                              label: Text(f),
+                              selected: active,
+                              onSelected: (_) => setState(() => _filter = f),
+                              backgroundColor: AppColors.surface,
+                              selectedColor: AppColors.emerald,
+                              labelStyle: TextStyle(
+                                color: active
+                                    ? AppColors.onEmerald
+                                    : AppColors.textSecondary,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 13,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                                side: BorderSide(
+                                  color: active
+                                      ? AppColors.emerald
+                                      : AppColors.border,
+                                ),
+                              ),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 4),
+                            );
+                          },
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      const Text(
+                        'Recommended for you',
+                        style: TextStyle(
+                            fontSize: 17, fontWeight: FontWeight.w700),
+                      ),
+                      const SizedBox(height: 14),
+                      ..._buildResults(state),
+                    ],
+                  ),
+                ),
               ),
             ),
-            const SizedBox(height: 16),
-            SizedBox(
-              height: 38,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                itemCount: _filters.length,
-                separatorBuilder: (_, __) => const SizedBox(width: 10),
-                itemBuilder: (_, i) {
-                  final f = _filters[i];
-                  final active = f == _filter;
-                  return ChoiceChip(
-                    label: Text(f),
-                    selected: active,
-                    onSelected: (_) => setState(() => _filter = f),
-                    backgroundColor: AppColors.surfaceAlt,
-                    selectedColor: AppColors.emerald,
-                    labelStyle: TextStyle(
-                        color: active
-                            ? AppColors.onEmerald
-                            : AppColors.textSecondary,
-                        fontWeight: FontWeight.w600),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        side: const BorderSide(color: AppColors.border)),
-                  );
-                },
-              ),
-            ),
-            const SizedBox(height: 18),
-            const Text('Recommended for you',
-                style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700)),
-            const SizedBox(height: 12),
-            ..._buildResults(state),
           ],
         ),
       ),
@@ -100,8 +171,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
   List<Widget> _buildResults(AppState state) {
     if (_filter == 'Clubs') {
       final clubs = state.communities
-          .where((c) =>
-              c.name.toLowerCase().contains(_query.toLowerCase()))
+          .where((c) => c.name.toLowerCase().contains(_query.toLowerCase()))
           .toList();
       if (clubs.isEmpty) {
         return [
@@ -122,8 +192,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
     }
     if (_query.isNotEmpty) {
       items = items
-          .where((p) =>
-              p.title.toLowerCase().contains(_query.toLowerCase()))
+          .where((p) => p.title.toLowerCase().contains(_query.toLowerCase()))
           .toList();
     }
     if (items.isEmpty) {
