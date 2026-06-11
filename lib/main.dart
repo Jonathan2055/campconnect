@@ -2,22 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'state/app_state.dart';
+import 'theme/app_theme.dart';
 import 'screens/login_screen.dart';
-import 'screens/home_screen.dart';
+import 'screens/main_shell.dart';
 
 void main() {
-  runApp(const CampConnectApp());
+  runApp(const ALUConnectApp());
 }
 
-class CampConnectApp extends StatelessWidget {
-  const CampConnectApp({super.key});
+class ALUConnectApp extends StatelessWidget {
+  const ALUConnectApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) => AppState(),
       child: MaterialApp(
-        title: 'Camp Connect',
+        title: 'ALU Intercampus Connect',
         debugShowCheckedModeBanner: false,
         theme: AppTheme.light,
         home: const AuthGate(),
@@ -36,7 +37,7 @@ class AuthGate extends StatelessWidget {
     final loggedIn = context.watch<AppState>().isLoggedIn;
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 300),
-      child: loggedIn ? const HomeScreen() : const LoginScreen(),
+      child: loggedIn ? const MainShell() : const LoginScreen(),
     );
   }
 }

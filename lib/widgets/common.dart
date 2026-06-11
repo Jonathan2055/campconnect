@@ -41,7 +41,7 @@ class Avatar extends StatelessWidget {
       width: size,
       height: size,
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.22),
+        color: color.withOpacity(0.22),
         shape: BoxShape.circle,
         border: Border.all(color: color, width: 1.4),
       ),
@@ -86,7 +86,7 @@ class GradientCover extends StatelessWidget {
       ),
       child: Center(
         child: Icon(icon,
-            color: Colors.white.withValues(alpha: 0.85), size: height * 0.32),
+            color: Colors.white.withOpacity(0.85), size: height * 0.32),
       ),
     );
   }
@@ -102,7 +102,7 @@ class PillTag extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.18),
+        color: color.withOpacity(0.18),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Text(
@@ -161,7 +161,6 @@ class GoldButton extends StatelessWidget {
         onPressed: onTap,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
           children: [
             if (icon != null) ...[
               Icon(icon, size: 18),

@@ -21,10 +21,10 @@ class LoginScreen extends StatelessWidget {
                 width: 76,
                 height: 76,
                 decoration: BoxDecoration(
-                    color: AppColors.gold,
+                    color: AppColors.emerald,
                     borderRadius: BorderRadius.circular(18)),
                 child: const Icon(Icons.hub,
-                    color: AppColors.goldInk, size: 42),
+                    color: AppColors.onEmerald, size: 42),
               ),
               const SizedBox(height: 20),
               const Text.rich(
@@ -40,7 +40,7 @@ class LoginScreen extends StatelessWidget {
                       style: TextStyle(
                           fontSize: 26,
                           fontWeight: FontWeight.w800,
-                          color: AppColors.gold)),
+                          color: AppColors.emerald)),
                 ]),
                 textAlign: TextAlign.center,
               ),
@@ -97,7 +97,7 @@ class LoginScreen extends StatelessWidget {
                     TextSpan(
                         text: 'Create account',
                         style: TextStyle(
-                            color: AppColors.gold,
+                            color: AppColors.emerald,
                             fontWeight: FontWeight.w700)),
                   ]),
                 ),
