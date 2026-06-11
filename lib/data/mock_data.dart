@@ -246,7 +246,10 @@ class MockData {
           time: 'Yesterday',
           messages: const [
             Message(
-                id: 'm6', sender: 'Jean', text: 'See you there!', time: 'Yesterday'),
+                id: 'm6',
+                sender: 'Jean',
+                text: 'See you there!',
+                time: 'Yesterday'),
           ],
         ),
         ChatThread(
@@ -259,7 +262,10 @@ class MockData {
           time: 'Yesterday',
           messages: const [
             Message(
-                id: 'm7', sender: 'Sarah', text: 'Any updates?', time: 'Yesterday'),
+                id: 'm7',
+                sender: 'Sarah',
+                text: 'Any updates?',
+                time: 'Yesterday'),
           ],
         ),
         ChatThread(
@@ -277,6 +283,74 @@ class MockData {
                 text: 'Great job everyone!',
                 time: '2d ago'),
           ],
+        ),
+      ];
+
+  static List<Teammate> teammates() => [
+        Teammate(
+          id: 'tm1',
+          name: 'Fatima Ndiaye',
+          major: 'Business & Finance',
+          campus: 'Kigali Campus',
+          color: AppColors.purple,
+          skills: ['Excel', 'Financial Modeling', 'Data Analysis'],
+          interests: ['Startups', 'Fintech', 'Social Impact'],
+          bio:
+              'Building the next generation of African leaders. Passionate about sustainable finance.',
+        ),
+        Teammate(
+          id: 'tm2',
+          name: 'David Okonkwo',
+          major: 'Software Engineering',
+          campus: 'Mauritius Campus',
+          color: AppColors.blue,
+          skills: ['Flutter', 'React', 'Backend APIs'],
+          interests: ['Tech', 'AI/ML', 'Hackathons'],
+          bio:
+              'Full-stack developer with 2+ years experience. Looking for co-founders.',
+          connected: true,
+        ),
+        Teammate(
+          id: 'tm3',
+          name: 'Jean-Paul Habimana',
+          major: 'Product Design',
+          campus: 'Kigali Campus',
+          color: AppColors.emerald,
+          skills: ['UI/UX Design', 'Figma', 'User Research'],
+          interests: ['Design Thinking', 'Community Tech', 'Climate Action'],
+          bio:
+              'UX designer passionate about solving problems for African communities.',
+        ),
+        Teammate(
+          id: 'tm4',
+          name: 'Sarah Kipchoge',
+          major: 'Business Administration',
+          campus: 'Mauritius Campus',
+          color: AppColors.pink,
+          skills: ['Business Strategy', 'Marketing', 'Event Planning'],
+          interests: ['Entrepreneurship', 'Marketing', 'Women in Tech'],
+          bio:
+              'Looking for a team to launch my startup idea. Open to collaboration!',
+        ),
+        Teammate(
+          id: 'tm5',
+          name: 'Emmanuel Mensah',
+          major: 'Computer Science',
+          campus: 'Kigali Campus',
+          color: AppColors.green,
+          skills: ['Python', 'Data Science', 'SQL'],
+          interests: ['AI', 'Social Impact', 'Climate Tech'],
+          bio: 'Data scientist interested in using tech for social good.',
+        ),
+        Teammate(
+          id: 'tm6',
+          name: 'Keziah Mugenyi',
+          major: 'Law & Governance',
+          campus: 'Mauritius Campus',
+          color: AppColors.teal,
+          skills: ['Legal Research', 'Policy Analysis', 'Public Speaking'],
+          interests: ['Social Justice', 'Governance', 'Policy'],
+          bio: 'Future lawyer interested in African policy innovation.',
         ),
       ];
 }
