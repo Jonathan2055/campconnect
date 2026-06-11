@@ -8,6 +8,8 @@ import '../widgets/common.dart';
 import '../widgets/cards.dart';
 
 class ExploreScreen extends StatefulWidget {
+  /// When true, the screen is pushed (shows a back button + AppBar) rather
+  /// than living inside the bottom-nav shell.
   final bool standalone;
   final String? initialFilter;
   const ExploreScreen(
