@@ -101,30 +101,6 @@ class ChatThread {
   }) : messages = messages ?? [];
 }
 
-class Teammate {
-  final String id;
-  final String name;
-  final String major;
-  final String campus;
-  final Color color;
-  final List<String> skills;
-  final List<String> interests;
-  final String bio;
-  bool connected;
-
-  Teammate({
-    required this.id,
-    required this.name,
-    required this.major,
-    required this.campus,
-    required this.color,
-    this.skills = const [],
-    this.interests = const [],
-    this.bio = '',
-    this.connected = false,
-  });
-}
-
 class AppUser {
   final String name;
   final String campus;
