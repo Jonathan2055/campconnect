@@ -89,7 +89,7 @@ class ProfileScreen extends StatelessWidget {
             style: const TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.w800,
-                color: AppColors.gold)),
+                color: AppColors.emerald)),
         Text(label,
             style:
                 const TextStyle(color: AppColors.textSecondary, fontSize: 13)),
@@ -104,7 +104,7 @@ class ProfileScreen extends StatelessWidget {
       decoration: BoxDecoration(
           color: AppColors.surface, borderRadius: BorderRadius.circular(14)),
       child: ListTile(
-        leading: Icon(icon, color: AppColors.gold),
+        leading: Icon(icon, color: AppColors.emerald),
         title: Text(label,
             style: const TextStyle(fontWeight: FontWeight.w600)),
         trailing: const Icon(Icons.chevron_right,

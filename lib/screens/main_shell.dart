@@ -40,8 +40,8 @@ class _MainShellState extends State<MainShell> {
     return Scaffold(
       body: IndexedStack(index: _index, children: _pages),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: AppColors.gold,
-        foregroundColor: AppColors.goldInk,
+        backgroundColor: AppColors.emerald,
+        foregroundColor: AppColors.onEmerald,
         elevation: 2,
         shape: const CircleBorder(),
         onPressed: _openCreate,
@@ -83,7 +83,7 @@ class _BottomBar extends StatelessWidget {
 
   Widget _item(IconData icon, String label, int i, {int badge = 0}) {
     final active = index == i;
-    final color = active ? AppColors.gold : AppColors.textSecondary;
+    final color = active ? AppColors.emerald : AppColors.textSecondary;
     return InkWell(
       onTap: () => onTap(i),
       borderRadius: BorderRadius.circular(12),
@@ -105,11 +105,11 @@ class _BottomBar extends StatelessWidget {
                       constraints:
                           const BoxConstraints(minWidth: 16, minHeight: 16),
                       decoration: const BoxDecoration(
-                          color: AppColors.gold, shape: BoxShape.circle),
+                          color: AppColors.emerald, shape: BoxShape.circle),
                       child: Text('$badge',
                           textAlign: TextAlign.center,
                           style: const TextStyle(
-                              color: AppColors.goldInk,
+                              color: AppColors.onEmerald,
                               fontSize: 10,
                               fontWeight: FontWeight.bold)),
                     ),

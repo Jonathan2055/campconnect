@@ -52,7 +52,7 @@ class _MyRsvpsScreenState extends State<MyRsvpsScreen> {
                                       _going ? 'Going' : 'Interested',
                                   statusColor: _going
                                       ? AppColors.green
-                                      : AppColors.gold,
+                                      : AppColors.emerald,
                                 ))
                             .toList(),
                       ),

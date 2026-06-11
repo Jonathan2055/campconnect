@@ -8,14 +8,6 @@ import '../screens/event_detail_screen.dart';
 import '../screens/chat_detail_screen.dart';
 import 'common.dart';
 
-const _cardShadow = [
-  BoxShadow(
-    color: Color(0x0D000000),
-    blurRadius: 10,
-    offset: Offset(0, 2),
-  ),
-];
-
 void openPost(BuildContext context, Post post) {
   Navigator.push(
     context,
@@ -23,6 +15,7 @@ void openPost(BuildContext context, Post post) {
   );
 }
 
+/// Large highlighted card for the Featured carousel/section.
 class FeaturedCard extends StatelessWidget {
   final Post post;
   const FeaturedCard({super.key, required this.post});
@@ -33,9 +26,8 @@ class FeaturedCard extends StatelessWidget {
       onTap: () => openPost(context, post),
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(18),
           color: AppColors.surface,
-          boxShadow: _cardShadow,
         ),
         clipBehavior: Clip.antiAlias,
         child: Column(
@@ -57,7 +49,7 @@ class FeaturedCard extends StatelessWidget {
                         end: Alignment.bottomCenter,
                         colors: [
                           Colors.transparent,
-                          AppColors.surface.withValues(alpha: 0.85),
+                          AppColors.surface.withOpacity(0.9),
                         ],
                       ),
                     ),
@@ -76,11 +68,11 @@ class FeaturedCard extends StatelessWidget {
                   const SizedBox(height: 2),
                   Text(post.title,
                       style: const TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.w700)),
+                          fontSize: 19, fontWeight: FontWeight.w700)),
                   const SizedBox(height: 6),
                   Row(children: [
                     const Icon(Icons.calendar_today,
-                        size: 13, color: AppColors.emerald),
+                        size: 14, color: AppColors.emerald),
                     const SizedBox(width: 6),
                     Expanded(
                       child: Text(post.dateLabel,
@@ -89,9 +81,12 @@ class FeaturedCard extends StatelessWidget {
                     ),
                   ]),
                   const SizedBox(height: 12),
-                  GoldButton(
-                      label: 'View details',
-                      onTap: () => openPost(context, post)),
+                  SizedBox(
+                    width: 160,
+                    child: GoldButton(
+                        label: 'View details',
+                        onTap: () => openPost(context, post)),
+                  ),
                 ],
               ),
             ),
@@ -102,6 +97,7 @@ class FeaturedCard extends StatelessWidget {
   }
 }
 
+/// Compact horizontal row for opportunities / search results.
 class OpportunityRow extends StatelessWidget {
   final Post post;
   const OpportunityRow({super.key, required this.post});
@@ -111,21 +107,20 @@ class OpportunityRow extends StatelessWidget {
     return GestureDetector(
       onTap: () => openPost(context, post),
       child: Container(
-        margin: const EdgeInsets.only(bottom: 10),
+        margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           color: AppColors.surface,
           borderRadius: BorderRadius.circular(14),
-          boxShadow: _cardShadow,
         ),
         child: Row(
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(12),
               child: GradientCover(
                 colors: post.coverGradient,
-                width: 52,
-                height: 52,
+                width: 56,
+                height: 56,
                 radius: BorderRadius.zero,
                 icon: post.type == PostType.opportunity
                     ? Icons.workspace_premium
@@ -163,6 +158,7 @@ class OpportunityRow extends StatelessWidget {
   }
 }
 
+/// Card with a status pill, used in My RSVPs.
 class EventListCard extends StatelessWidget {
   final Post post;
   final String? statusLabel;
@@ -175,22 +171,21 @@ class EventListCard extends StatelessWidget {
     return GestureDetector(
       onTap: () => openPost(context, post),
       child: Container(
-        margin: const EdgeInsets.only(bottom: 10),
+        margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: AppColors.surface,
-          borderRadius: BorderRadius.circular(14),
-          boxShadow: _cardShadow,
+          borderRadius: BorderRadius.circular(16),
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(12),
               child: GradientCover(
                 colors: post.coverGradient,
-                width: 68,
-                height: 68,
+                width: 70,
+                height: 70,
                 radius: BorderRadius.zero,
                 icon: Icons.event,
               ),
@@ -224,6 +219,7 @@ class EventListCard extends StatelessWidget {
   }
 }
 
+/// A community row with a Join / Joined toggle wired to state.
 class CommunityTile extends StatelessWidget {
   final Community community;
   const CommunityTile({super.key, required this.community});
@@ -233,16 +229,15 @@ class CommunityTile extends StatelessWidget {
     final state = context.read<AppState>();
     final joined = community.joined;
     return Container(
-      margin: const EdgeInsets.only(bottom: 10),
+      margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(14),
-        boxShadow: _cardShadow,
+        borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
         children: [
-          Avatar(name: community.name, color: community.color, size: 46),
+          Avatar(name: community.name, color: community.color, size: 48),
           const SizedBox(width: 14),
           Expanded(
             child: Column(
@@ -275,6 +270,7 @@ class CommunityTile extends StatelessWidget {
   }
 }
 
+/// A chat list row; tapping marks it read and opens the thread.
 class ChatTile extends StatelessWidget {
   final ChatThread thread;
   const ChatTile({super.key, required this.thread});
@@ -291,14 +287,9 @@ class ChatTile extends StatelessWidget {
       },
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12),
-        decoration: const BoxDecoration(
-          border: Border(
-            bottom: BorderSide(color: AppColors.border, width: 0.5),
-          ),
-        ),
         child: Row(
           children: [
-            Avatar(name: thread.name, color: thread.color, size: 48),
+            Avatar(name: thread.name, color: thread.color, size: 50),
             const SizedBox(width: 12),
             Expanded(
               child: Column(
