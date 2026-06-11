@@ -10,8 +10,7 @@ import '../widgets/cards.dart';
 class ExploreScreen extends StatefulWidget {
   final bool standalone;
   final String? initialFilter;
-  const ExploreScreen(
-      {super.key, this.standalone = false, this.initialFilter});
+  const ExploreScreen({super.key, this.standalone = false, this.initialFilter});
 
   @override
   State<ExploreScreen> createState() => _ExploreScreenState();
@@ -95,8 +94,12 @@ class _ExploreScreenState extends State<ExploreScreen> {
               child: Container(
                 decoration: const BoxDecoration(
                   color: AppColors.bg,
+<<<<<<< HEAD
                   borderRadius:
                       BorderRadius.vertical(top: Radius.circular(28)),
+=======
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+>>>>>>> 02969e3040e71ee526b14c05429967bb01725623
                 ),
                 child: ClipRRect(
                   borderRadius:
@@ -120,16 +123,24 @@ class _ExploreScreenState extends State<ExploreScreen> {
                         child: ListView.separated(
                           scrollDirection: Axis.horizontal,
                           itemCount: _filters.length,
+<<<<<<< HEAD
                           separatorBuilder: (_, __) =>
                               const SizedBox(width: 8),
+=======
+                          separatorBuilder: (_, __) => const SizedBox(width: 8),
+>>>>>>> 02969e3040e71ee526b14c05429967bb01725623
                           itemBuilder: (_, i) {
                             final f = _filters[i];
                             final active = f == _filter;
                             return ChoiceChip(
                               label: Text(f),
                               selected: active,
+<<<<<<< HEAD
                               onSelected: (_) =>
                                   setState(() => _filter = f),
+=======
+                              onSelected: (_) => setState(() => _filter = f),
+>>>>>>> 02969e3040e71ee526b14c05429967bb01725623
                               backgroundColor: AppColors.surface,
                               selectedColor: AppColors.emerald,
                               labelStyle: TextStyle(
@@ -175,8 +186,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
   List<Widget> _buildResults(AppState state) {
     if (_filter == 'Clubs') {
       final clubs = state.communities
-          .where((c) =>
-              c.name.toLowerCase().contains(_query.toLowerCase()))
+          .where((c) => c.name.toLowerCase().contains(_query.toLowerCase()))
           .toList();
       if (clubs.isEmpty) {
         return [
@@ -198,8 +208,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
     }
     if (_query.isNotEmpty) {
       items = items
-          .where((p) =>
-              p.title.toLowerCase().contains(_query.toLowerCase()))
+          .where((p) => p.title.toLowerCase().contains(_query.toLowerCase()))
           .toList();
     }
     if (items.isEmpty) {

@@ -10,8 +10,11 @@ import 'communities_screen.dart';
 import 'event_detail_screen.dart';
 import 'explore_screen.dart';
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 02969e3040e71ee526b14c05429967bb01725623
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -74,6 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       ),
                     ),
+<<<<<<< HEAD
                     _IconBadge(icon: Icons.search_rounded, onTap: () {
                       Navigator.push(
                         context,
@@ -81,6 +85,18 @@ class _HomeScreenState extends State<HomeScreen> {
                             builder: (_) => const ExploreScreen(standalone: true)),
                       );
                     }),
+=======
+                    _IconBadge(
+                        icon: Icons.search_rounded,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) =>
+                                    const ExploreScreen(standalone: true)),
+                          );
+                        }),
+>>>>>>> 02969e3040e71ee526b14c05429967bb01725623
                     const SizedBox(width: 8),
                     const _IconBadge(icon: Icons.notifications_none_rounded),
                   ],
@@ -154,8 +170,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         decoration: const InputDecoration(
                           hintText: 'Search opportunities, events…',
+<<<<<<< HEAD
                           prefixIcon:
                               Icon(Icons.search, color: AppColors.textSecondary),
+=======
+                          prefixIcon: Icon(Icons.search,
+                              color: AppColors.textSecondary),
+>>>>>>> 02969e3040e71ee526b14c05429967bb01725623
                         ),
                       ),
                     ),
@@ -174,8 +195,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           return ChoiceChip(
                             label: Text(f),
                             selected: active,
+<<<<<<< HEAD
                             onSelected: (_) =>
                                 setState(() => _filter = f),
+=======
+                            onSelected: (_) => setState(() => _filter = f),
+>>>>>>> 02969e3040e71ee526b14c05429967bb01725623
                             backgroundColor: AppColors.surface,
                             selectedColor: AppColors.emerald,
                             labelStyle: TextStyle(
@@ -436,8 +461,12 @@ class _BookmarkButton extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(12),
+<<<<<<< HEAD
         border:
             Border.all(color: Colors.white.withValues(alpha: 0.2)),
+=======
+        border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
+>>>>>>> 02969e3040e71ee526b14c05429967bb01725623
       ),
       child: const Icon(Icons.bookmark_border_rounded,
           color: Colors.white, size: 20),
@@ -462,8 +491,23 @@ class _DailyBriefing extends StatelessWidget {
     final events = state.events;
     final now = DateTime.now();
     const months = [
+<<<<<<< HEAD
       'Jan','Feb','Mar','Apr','May','Jun',
       'Jul','Aug','Sep','Oct','Nov','Dec',
+=======
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+>>>>>>> 02969e3040e71ee526b14c05429967bb01725623
     ];
     final dateStr = '${months[now.month - 1]} ${now.day}, ${now.year}';
 
@@ -473,8 +517,12 @@ class _DailyBriefing extends StatelessWidget {
         _BriefingItem(
           color: _colors[0],
           title: events.first.title,
+<<<<<<< HEAD
           subtitle:
               'Happening at ${events.first.location}.',
+=======
+          subtitle: 'Happening at ${events.first.location}.',
+>>>>>>> 02969e3040e71ee526b14c05429967bb01725623
         ),
       if (state.opportunities.isNotEmpty)
         _BriefingItem(
@@ -628,8 +676,13 @@ class _FilteredSection extends StatelessWidget {
             children: [
               Text(
                 filter == 'All' ? 'Latest Opportunities' : filter,
+<<<<<<< HEAD
                 style: const TextStyle(
                     fontSize: 17, fontWeight: FontWeight.w700),
+=======
+                style:
+                    const TextStyle(fontSize: 17, fontWeight: FontWeight.w700),
+>>>>>>> 02969e3040e71ee526b14c05429967bb01725623
               ),
               GestureDetector(
                 onTap: () => Navigator.push(
@@ -677,6 +730,7 @@ class _ClubsSection extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text('Clubs',
+<<<<<<< HEAD
                   style:
                       TextStyle(fontSize: 17, fontWeight: FontWeight.w700)),
               GestureDetector(
@@ -689,6 +743,17 @@ class _ClubsSection extends StatelessWidget {
                     style: TextStyle(
                         color: AppColors.emerald,
                         fontWeight: FontWeight.w600)),
+=======
+                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700)),
+              GestureDetector(
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const CommunitiesScreen()),
+                ),
+                child: const Text('See all',
+                    style: TextStyle(
+                        color: AppColors.emerald, fontWeight: FontWeight.w600)),
+>>>>>>> 02969e3040e71ee526b14c05429967bb01725623
               ),
             ],
           ),
