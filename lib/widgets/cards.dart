@@ -286,7 +286,7 @@ class ChatTile extends StatelessWidget {
         context.read<AppState>().markRead(thread.id);
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (_) => ChatDetailScreen(chat: thread)),
+          MaterialPageRoute(builder: (_) => ChatDetailScreen(thread: thread)),
         );
       },
       child: Container(
@@ -333,8 +333,8 @@ class ChatTile extends StatelessWidget {
                         Container(
                           margin: const EdgeInsets.only(left: 8),
                           padding: const EdgeInsets.all(6),
-                          constraints:
-                              const BoxConstraints(minWidth: 22, minHeight: 22),
+                          constraints: const BoxConstraints(
+                              minWidth: 22, minHeight: 22),
                           decoration: const BoxDecoration(
                               color: AppColors.emerald, shape: BoxShape.circle),
                           child: Text('${thread.unread}',

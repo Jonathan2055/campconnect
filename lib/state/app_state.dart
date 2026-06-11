@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 
 import '../data/mock_data.dart';
 import '../models/models.dart';
-import '../theme/app_theme.dart';
 
 /// Single source of truth for the app. Screens read from it with
 /// context.watch<AppState>() and trigger changes with context.read<AppState>().
@@ -18,7 +17,6 @@ class AppState extends ChangeNotifier {
   final List<Post> _posts = MockData.posts();
   final List<Community> _communities = MockData.communities();
   final List<ChatThread> _chats = MockData.chats();
-  final List<Teammate> _teammates = MockData.teammates();
   final Set<String> _going = {..._seededGoing};
   final Set<String> _interested = {..._seededInterested};
 
@@ -33,9 +31,6 @@ class AppState extends ChangeNotifier {
   List<Community> get myCommunities =>
       _communities.where((c) => c.joined).toList();
   List<ChatThread> get chats => List.unmodifiable(_chats);
-  List<Teammate> get teammates => List.unmodifiable(_teammates);
-  List<Teammate> get myConnections =>
-      _teammates.where((t) => t.connected).toList();
   List<Post> get goingPosts =>
       _posts.where((p) => _going.contains(p.id)).toList();
   List<Post> get interestedPosts =>
@@ -115,24 +110,6 @@ class AppState extends ChangeNotifier {
       notifyListeners();
     }
   }
-
-  // ---- Teammates ----
-  void toggleConnect(String id) {
-    final t = _teammates.firstWhere((tm) => tm.id == id);
-    t.connected = !t.connected;
-    notifyListeners();
-  }
-
-  bool isConnected(String id) => _teammates
-      .firstWhere((tm) => tm.id == id,
-          orElse: () => Teammate(
-                id: '',
-                name: '',
-                major: '',
-                campus: '',
-                color: AppColors.emerald,
-              ))
-      .connected;
 
   // Live counts that reflect the current user's own toggle without
   // double-counting the seeded RSVPs already baked into the mock numbers.
