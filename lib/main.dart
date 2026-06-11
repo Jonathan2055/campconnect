@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'state/app_state.dart';
 import 'screens/login_screen.dart';
+import 'screens/home_screen.dart';
 
 void main() {
   runApp(const CampConnectApp());
@@ -35,7 +36,7 @@ class AuthGate extends StatelessWidget {
     final loggedIn = context.watch<AppState>().isLoggedIn;
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 300),
-      child: loggedIn ? const MainShell() : const LoginScreen(),
+      child: loggedIn ? const HomeScreen() : const LoginScreen(),
     );
   }
 }
