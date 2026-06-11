@@ -5,7 +5,6 @@ import '../models/models.dart';
 import '../state/app_state.dart';
 import '../theme/app_theme.dart';
 import '../widgets/common.dart';
-import 'find_a_teammate_screen.dart';
 
 class CommunitiesScreen extends StatefulWidget {
   const CommunitiesScreen({super.key});
@@ -46,23 +45,6 @@ class _CommunitiesScreenState extends State<CommunitiesScreen> {
                       const Text('Communities',
                           style: TextStyle(
                               fontSize: 26, fontWeight: FontWeight.w800)),
-                      GestureDetector(
-                        onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const FindATeammateScreen(),
-                          ),
-                        ),
-                        child: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: AppColors.emerald,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: const Icon(Icons.person_add,
-                              color: Colors.white, size: 20),
-                        ),
-                      ),
                     ],
                   ),
                   const SizedBox(height: 16),
