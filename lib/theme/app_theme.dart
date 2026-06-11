@@ -22,7 +22,7 @@ class AppTheme {
     final base = ThemeData.light(useMaterial3: true);
     return base.copyWith(
       scaffoldBackgroundColor: AppColors.bg,
-      colorScheme: base.colorScheme.copyWith(
+      colorScheme: base.colorScheme.copyWith( 
         primary: AppColors.emerald,
         onPrimary: AppColors.onEmerald,
         secondary: AppColors.blue,

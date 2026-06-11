@@ -47,7 +47,8 @@ class HomeScreen extends StatelessWidget {
               onTap: () => _goExplore(context),
               decoration: const InputDecoration(
                 hintText: 'Search opportunities, events, people...',
-                prefixIcon: Icon(Icons.search, color: AppColors.textSecondary),
+                prefixIcon:
+                    Icon(Icons.search, color: AppColors.textSecondary),
               ),
             ),
             const SizedBox(height: 18),

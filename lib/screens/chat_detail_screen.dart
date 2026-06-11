@@ -137,7 +137,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                                   fontWeight: FontWeight.w600)),
                           Text(m.attachmentSize ?? '',
                               style: TextStyle(
-                                  color: textColor.withOpacity(0.7),
+                                  color: textColor.withValues(alpha: 0.7),
                                   fontSize: 11)),
                         ],
                       ),

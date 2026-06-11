@@ -178,6 +178,115 @@ class MockData {
             color: AppColors.blue),
       ];
 
+  static List<FeedEntry> feedEntries() => [
+        FeedEntry(
+          id: 'f1',
+          authorName: 'Kwame Asante',
+          authorColor: AppColors.purple,
+          content:
+              'The AI Workshop yesterday was absolutely mind-blowing! We built a working poverty predictor using real NGO data in under 3 hours. If you missed it — run to the next one. Huge thanks to the Tech Hub team for organising this!',
+          type: FeedEntryType.experience,
+          timeAgo: '2h ago',
+          likes: 34,
+          comments: [
+            FeedComment(
+              id: 'fc1',
+              authorName: 'Amara Diallo',
+              authorColor: AppColors.pink,
+              text: 'I was there too! Best session of the semester 🙌',
+              timeAgo: '1h ago',
+            ),
+            FeedComment(
+              id: 'fc2',
+              authorName: 'David Okonkwo',
+              authorColor: AppColors.blue,
+              text: 'Agree! The facilitator was incredible.',
+              timeAgo: '45m ago',
+            ),
+          ],
+        ),
+        FeedEntry(
+          id: 'f2',
+          authorName: 'Fatima Al-Hassan',
+          authorColor: AppColors.teal,
+          content:
+              "Don't miss the Entrepreneurship Pitch Night this Friday! Last year's winner raised \$50K seed funding. This year could be YOUR turn. DM me if you need help with your deck.",
+          type: FeedEntryType.promotion,
+          timeAgo: '4h ago',
+          linkedEventId: 'e2',
+          linkedEventTitle: 'ALU Entrepreneurship Pitch Night',
+          linkedEventDate: 'May 24, 2026 • 6:00 PM',
+          linkedEventLocation: 'Kigali Campus • Main Auditorium',
+          linkedEventGradient: [AppColors.purple, AppColors.blue],
+          likes: 21,
+          comments: [
+            FeedComment(
+              id: 'fc3',
+              authorName: 'Aline Umuhoza',
+              authorColor: AppColors.emerald,
+              text: 'Will be there! 🔥',
+              timeAgo: '3h ago',
+            ),
+          ],
+        ),
+        FeedEntry(
+          id: 'f3',
+          authorName: 'Jean-Paul Nkurunziza',
+          authorColor: AppColors.blue,
+          content:
+              "Design Thinking Bootcamp day 1 done ✅ We spent 3 hours just listening to our users before writing a single line or sketching a wireframe. That patience is the real skill. #HumanCentredDesign",
+          type: FeedEntryType.experience,
+          timeAgo: '1d ago',
+          likes: 47,
+        ),
+        FeedEntry(
+          id: 'f4',
+          authorName: 'Sarah Osei',
+          authorColor: AppColors.pink,
+          content:
+              'Climate Action Week is coming to ALL campuses next week! We need volunteers for the tree-planting drive on Wednesday. This is your chance to make a real impact — sign up in the comments!',
+          type: FeedEntryType.promotion,
+          timeAgo: '1d ago',
+          linkedEventId: 'e5',
+          linkedEventTitle: 'ALU Climate Action Week',
+          linkedEventDate: 'May 26 - 30, 2026',
+          linkedEventLocation: 'All Campuses',
+          linkedEventGradient: [AppColors.blue, AppColors.purple],
+          likes: 58,
+          comments: [
+            FeedComment(
+              id: 'fc4',
+              authorName: 'Emmanuel Ndayizeye',
+              authorColor: AppColors.green,
+              text: 'Count me in! 🌳',
+              timeAgo: '20h ago',
+            ),
+            FeedComment(
+              id: 'fc5',
+              authorName: 'Kwame Asante',
+              authorColor: AppColors.purple,
+              text: "I'll bring the whole dorm block 😂",
+              timeAgo: '18h ago',
+            ),
+          ],
+        ),
+        FeedEntry(
+          id: 'f5',
+          authorName: 'Amara Diallo',
+          authorColor: AppColors.pink,
+          content:
+              'Just submitted my application for the Campus Ambassador Program! Fingers crossed 🤞 If you\'re thinking about it — deadline is May 22. The experience is worth it, I heard from last year\'s cohort.',
+          type: FeedEntryType.promotion,
+          timeAgo: '2d ago',
+          linkedEventId: 'o2',
+          linkedEventTitle: 'Campus Ambassador Program',
+          linkedEventDate: 'Apply by May 22, 2026',
+          linkedEventLocation: 'All Campuses',
+          linkedEventGradient: [AppColors.purple, AppColors.pink],
+          likes: 29,
+        ),
+      ];
+
   static List<ChatThread> chats() => [
         ChatThread(
           id: 't1',

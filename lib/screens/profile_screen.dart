@@ -22,11 +22,15 @@ class ProfileScreen extends StatelessWidget {
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                Text('Profile',
+              children: [
+                const Text('Profile',
                     style: TextStyle(
                         fontSize: 26, fontWeight: FontWeight.w800)),
-                Icon(Icons.settings, color: AppColors.textSecondary),
+                IconButton(
+                  icon: const Icon(Icons.edit_outlined,
+                      color: AppColors.textSecondary),
+                  onPressed: () => _editProfile(context),
+                ),
               ],
             ),
             const SizedBox(height: 20),
@@ -63,7 +67,7 @@ class ProfileScreen extends StatelessWidget {
             _tile(context, Icons.notifications_none, 'Notifications',
                 () => _soon(context)),
             _tile(context, Icons.settings_outlined, 'Account Settings',
-                () => _soon(context)),
+                () => _editProfile(context)),
             _tile(context, Icons.help_outline, 'Help & Support',
                 () => _soon(context)),
             const SizedBox(height: 12),
@@ -103,14 +107,119 @@ class ProfileScreen extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
           color: AppColors.surface, borderRadius: BorderRadius.circular(14)),
-      child: ListTile(
-        leading: Icon(icon, color: AppColors.emerald),
-        title: Text(label,
-            style: const TextStyle(fontWeight: FontWeight.w600)),
-        trailing: const Icon(Icons.chevron_right,
-            color: AppColors.textSecondary),
-        onTap: onTap,
+      clipBehavior: Clip.antiAlias,
+      child: Material(
+        color: Colors.transparent,
+        child: ListTile(
+          leading: Icon(icon, color: AppColors.emerald),
+          title: Text(label,
+              style: const TextStyle(fontWeight: FontWeight.w600)),
+          trailing: const Icon(Icons.chevron_right,
+              color: AppColors.textSecondary),
+          onTap: onTap,
+        ),
       ),
+    );
+  }
+
+  void _editProfile(BuildContext context) {
+    final state = context.read<AppState>();
+    final nameCtrl = TextEditingController(text: state.currentUser.name);
+    const campuses = ['Kigali Campus', 'Mauritius Campus', 'Lagos Campus'];
+    String campus = campuses.contains(state.currentUser.campus)
+        ? state.currentUser.campus
+        : campuses.first;
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: AppColors.surface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (sheetCtx) {
+        return StatefulBuilder(
+          builder: (sheetCtx, setModal) {
+            return Padding(
+              padding: EdgeInsets.fromLTRB(
+                  24, 24, 24,
+                  MediaQuery.of(sheetCtx).viewInsets.bottom + 32),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('Edit Profile',
+                      style: TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.w800)),
+                  const SizedBox(height: 20),
+                  const Text('Name',
+                      style: TextStyle(fontWeight: FontWeight.w600)),
+                  const SizedBox(height: 8),
+                  TextField(
+                    controller: nameCtrl,
+                    textCapitalization: TextCapitalization.words,
+                    decoration: const InputDecoration(
+                        hintText: 'Your full name'),
+                  ),
+                  const SizedBox(height: 16),
+                  const Text('Campus',
+                      style: TextStyle(fontWeight: FontWeight.w600)),
+                  const SizedBox(height: 8),
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 14),
+                    decoration: BoxDecoration(
+                      color: AppColors.surfaceAlt,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: AppColors.border),
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        value: campus,
+                        isExpanded: true,
+                        dropdownColor: AppColors.surfaceAlt,
+                        onChanged: (v) =>
+                            setModal(() => campus = v ?? campus),
+                        items: campuses
+                            .map((c) => DropdownMenuItem(
+                                value: c, child: Text(c)))
+                            .toList(),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.emerald,
+                        foregroundColor: AppColors.onEmerald,
+                        padding:
+                            const EdgeInsets.symmetric(vertical: 15),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(14)),
+                        elevation: 0,
+                      ),
+                      onPressed: () {
+                        final name = nameCtrl.text.trim();
+                        if (name.isEmpty) return;
+                        context
+                            .read<AppState>()
+                            .updateProfile(name, campus);
+                        Navigator.pop(sheetCtx);
+                      },
+                      child: const Text('Save Changes',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 15)),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
     );
   }
 

@@ -14,7 +14,8 @@ class CreatePostScreen extends StatefulWidget {
 }
 
 class _CreatePostScreenState extends State<CreatePostScreen> {
-  PostType _type = PostType.event;
+  // 0 = event, 1 = opportunity, 2 = club
+  int _mode = 0;
   final _title = TextEditingController();
   final _desc = TextEditingController();
   final _date = TextEditingController();
@@ -25,7 +26,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   static const _locations = [
     'Kigali Campus',
     'Mauritius Campus',
-    'All Campuses'
+    'All Campuses',
   ];
   static const _categories = [
     'Tech',
@@ -34,11 +35,11 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     'Community',
     'Competition',
     'Internship',
-    'Leadership'
+    'Leadership',
   ];
   static const _months = [
     'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
   ];
 
   @override
@@ -63,46 +64,68 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     final dateStr = '${_months[d.month - 1]} ${d.day}, ${d.year}';
     setState(() {
       _date.text =
-          t == null ? dateStr : '$dateStr \u2022 ${t.format(context)}';
+          t == null ? dateStr : '$dateStr • ${t.format(context)}';
       _error = null;
     });
   }
 
   void _publish() {
-    if (_title.text.trim().isEmpty) {
-      setState(() => _error = 'Please add a title.');
+    final titleText = _title.text.trim();
+    if (titleText.isEmpty) {
+      setState(() =>
+          _error = _mode == 2 ? 'Please add a club name.' : 'Please add a title.');
       return;
     }
     if (_category == null) {
       setState(() => _error = 'Please select a category.');
       return;
     }
+
     final state = context.read<AppState>();
     final messenger = ScaffoldMessenger.of(context);
     final navigator = Navigator.of(context);
 
-    final gradient = _type == PostType.event
-        ? const [AppColors.purple, AppColors.blue]
-        : const [AppColors.green, AppColors.blue];
+    if (_mode == 2) {
+      const clubColors = [
+        AppColors.emerald, AppColors.purple, AppColors.blue,
+        AppColors.teal, AppColors.pink, AppColors.green,
+      ];
+      state.addCommunity(Community(
+        id: 'club${DateTime.now().millisecondsSinceEpoch}',
+        name: titleText,
+        members: 1,
+        color: clubColors[titleText.length % clubColors.length],
+        joined: true,
+      ));
+      navigator.pop();
+      messenger.showSnackBar(const SnackBar(
+        content: Text('Club created! Find it in Communities.'),
+        backgroundColor: AppColors.green,
+      ));
+      return;
+    }
 
+    final isOpportunity = _mode == 1;
     state.addPost(Post(
       id: 'u${DateTime.now().millisecondsSinceEpoch}',
-      type: _type,
-      title: _title.text.trim(),
+      type: isOpportunity ? PostType.opportunity : PostType.event,
+      title: titleText,
       description: _desc.text.trim().isEmpty
           ? 'No description provided.'
           : _desc.text.trim(),
       organizer: state.currentUser.name,
-      dateLabel: _date.text.trim().isEmpty ? 'Date TBA' : _date.text.trim(),
+      dateLabel:
+          _date.text.trim().isEmpty ? 'Date TBA' : _date.text.trim(),
       location: _location,
       category: _category!,
       tags: [_category!],
-      coverGradient: gradient,
-      deadlineLabel: _type == PostType.opportunity
+      coverGradient: isOpportunity
+          ? const [AppColors.green, AppColors.blue]
+          : const [AppColors.purple, AppColors.blue],
+      deadlineLabel: isOpportunity
           ? (_date.text.trim().isEmpty ? 'Apply soon' : _date.text.trim())
           : null,
     ));
-
     navigator.pop();
     messenger.showSnackBar(const SnackBar(
       content: Text('Posted! It now appears in your feed.'),
@@ -113,87 +136,144 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:
-          AppBar(leading: const BackButton(), title: const Text('Create Post')),
+      appBar: AppBar(
+        leading: const BackButton(),
+        title: Text(_mode == 2 ? 'Create Club' : 'Create Post'),
+      ),
       body: SafeArea(
         top: false,
         child: ListView(
           padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
           children: [
-            SegmentedToggle(
-              leftLabel: 'Event',
-              rightLabel: 'Opportunity',
-              leftSelected: _type == PostType.event,
-              onChanged: (left) => setState(() =>
-                  _type = left ? PostType.event : PostType.opportunity),
+            Container(
+              padding: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                color: AppColors.surfaceAlt,
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(color: AppColors.border),
+              ),
+              child: Row(
+                children: [
+                  _modeBtn('Event', 0),
+                  _modeBtn('Opportunity', 1),
+                  _modeBtn('Club', 2),
+                ],
+              ),
             ),
             const SizedBox(height: 20),
-            GestureDetector(
-              onTap: () => ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                    content:
-                        Text('Image upload is mocked in this prototype.')),
-              ),
-              child: Container(
-                height: 130,
-                decoration: BoxDecoration(
-                  color: AppColors.surfaceAlt,
-                  borderRadius: BorderRadius.circular(14),
-                  border: Border.all(color: AppColors.border),
+            if (_mode != 2) ...[
+              GestureDetector(
+                onTap: () => ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                      content: Text(
+                          'Image upload is mocked in this prototype.')),
                 ),
-                child: const Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.image_outlined,
-                        color: AppColors.textSecondary, size: 32),
-                    SizedBox(height: 8),
-                    Text('Add cover image',
-                        style: TextStyle(color: AppColors.textSecondary)),
-                  ],
+                child: Container(
+                  height: 130,
+                  decoration: BoxDecoration(
+                    color: AppColors.surfaceAlt,
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(color: AppColors.border),
+                  ),
+                  child: const Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.image_outlined,
+                          color: AppColors.textSecondary, size: 32),
+                      SizedBox(height: 8),
+                      Text('Add cover image',
+                          style:
+                              TextStyle(color: AppColors.textSecondary)),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 18),
-            _label('Title'),
+              const SizedBox(height: 18),
+            ],
+            _label(_mode == 2 ? 'Club Name' : 'Title'),
             TextField(
-                controller: _title,
-                decoration: const InputDecoration(
-                    hintText: 'e.g. Leadership Workshop')),
-            const SizedBox(height: 16),
-            _label('Description'),
-            TextField(
-                controller: _desc,
-                maxLines: 3,
-                decoration: const InputDecoration(
-                    hintText: 'Tell people more about this...')),
-            const SizedBox(height: 16),
-            _label('Date & Time'),
-            TextField(
-              controller: _date,
-              readOnly: true,
-              onTap: _pickDate,
-              decoration: const InputDecoration(
-                hintText: 'Select date & time',
-                suffixIcon: Icon(Icons.calendar_today,
-                    color: AppColors.textSecondary, size: 18),
+              controller: _title,
+              decoration: InputDecoration(
+                hintText: _mode == 2
+                    ? 'e.g. Photography Club'
+                    : 'e.g. Leadership Workshop',
               ),
             ),
             const SizedBox(height: 16),
-            _label('Location'),
-            _dropdown(_location, _locations,
-                (v) => setState(() => _location = v ?? _location)),
+            _label(_mode == 2 ? 'About this club' : 'Description'),
+            TextField(
+              controller: _desc,
+              maxLines: 3,
+              decoration: InputDecoration(
+                hintText: _mode == 2
+                    ? 'What is this club about?'
+                    : 'Tell people more about this...',
+              ),
+            ),
             const SizedBox(height: 16),
+            if (_mode != 2) ...[
+              _label('Date & Time'),
+              TextField(
+                controller: _date,
+                readOnly: true,
+                onTap: _pickDate,
+                decoration: const InputDecoration(
+                  hintText: 'Select date & time',
+                  suffixIcon: Icon(Icons.calendar_today,
+                      color: AppColors.textSecondary, size: 18),
+                ),
+              ),
+              const SizedBox(height: 16),
+              _label('Location'),
+              _dropdown(_location, _locations,
+                  (v) => setState(() => _location = v ?? _location)),
+              const SizedBox(height: 16),
+            ],
             _label('Category'),
             _dropdown(_category, _categories,
                 (v) => setState(() => _category = v),
                 hint: 'Select category'),
             if (_error != null) ...[
               const SizedBox(height: 12),
-              Text(_error!, style: const TextStyle(color: AppColors.pink)),
+              Text(_error!,
+                  style: const TextStyle(color: AppColors.pink)),
             ],
             const SizedBox(height: 24),
-            GoldButton(label: 'Publish', icon: Icons.send, onTap: _publish),
+            GoldButton(
+              label: _mode == 2 ? 'Create Club' : 'Publish',
+              icon: _mode == 2 ? Icons.group_add : Icons.send,
+              onTap: _publish,
+            ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _modeBtn(String label, int mode) {
+    final active = _mode == mode;
+    return Expanded(
+      child: GestureDetector(
+        onTap: () => setState(() {
+          _mode = mode;
+          _error = null;
+        }),
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          decoration: BoxDecoration(
+            color: active ? AppColors.emerald : Colors.transparent,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          alignment: Alignment.center,
+          child: Text(
+            label,
+            style: TextStyle(
+              color:
+                  active ? AppColors.onEmerald : AppColors.textSecondary,
+              fontWeight: FontWeight.w700,
+              fontSize: 13,
+            ),
+          ),
         ),
       ),
     );
@@ -201,12 +281,16 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 
   Widget _label(String t) => Padding(
         padding: const EdgeInsets.only(bottom: 8),
-        child: Text(t, style: const TextStyle(fontWeight: FontWeight.w600)),
+        child:
+            Text(t, style: const TextStyle(fontWeight: FontWeight.w600)),
       );
 
-  Widget _dropdown(String? value, List<String> items,
-      ValueChanged<String?> onChanged,
-      {String? hint}) {
+  Widget _dropdown(
+    String? value,
+    List<String> items,
+    ValueChanged<String?> onChanged, {
+    String? hint,
+  }) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14),
       decoration: BoxDecoration(
@@ -221,7 +305,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
           dropdownColor: AppColors.surfaceAlt,
           hint: hint != null
               ? Text(hint,
-                  style: const TextStyle(color: AppColors.textSecondary))
+                  style:
+                      const TextStyle(color: AppColors.textSecondary))
               : null,
           icon: const Icon(Icons.keyboard_arrow_down,
               color: AppColors.textSecondary),

@@ -2,6 +2,58 @@ import 'package:flutter/material.dart';
 
 enum PostType { event, opportunity }
 
+enum FeedEntryType { experience, promotion }
+
+class FeedComment {
+  final String id;
+  final String authorName;
+  final Color authorColor;
+  final String text;
+  final String timeAgo;
+
+  FeedComment({
+    required this.id,
+    required this.authorName,
+    required this.authorColor,
+    required this.text,
+    required this.timeAgo,
+  });
+}
+
+class FeedEntry {
+  final String id;
+  final String authorName;
+  final Color authorColor;
+  final String content;
+  final FeedEntryType type;
+  final String timeAgo;
+  final String? linkedEventId;
+  final String? linkedEventTitle;
+  final String? linkedEventDate;
+  final String? linkedEventLocation;
+  final List<Color>? linkedEventGradient;
+  int likes;
+  bool likedByMe;
+  final List<FeedComment> comments;
+
+  FeedEntry({
+    required this.id,
+    required this.authorName,
+    required this.authorColor,
+    required this.content,
+    required this.type,
+    required this.timeAgo,
+    this.linkedEventId,
+    this.linkedEventTitle,
+    this.linkedEventDate,
+    this.linkedEventLocation,
+    this.linkedEventGradient,
+    this.likes = 0,
+    this.likedByMe = false,
+    List<FeedComment>? comments,
+  }) : comments = comments ?? [];
+}
+
 /// A unified model for both events and opportunities so the feed can mix them.
 class Post {
   final String id;
@@ -117,4 +169,22 @@ class AppUser {
     this.communities = 0,
     this.connections = 0,
   });
+
+  AppUser copyWith({
+    String? name,
+    String? campus,
+    Color? color,
+    int? events,
+    int? communities,
+    int? connections,
+  }) {
+    return AppUser(
+      name: name ?? this.name,
+      campus: campus ?? this.campus,
+      color: color ?? this.color,
+      events: events ?? this.events,
+      communities: communities ?? this.communities,
+      connections: connections ?? this.connections,
+    );
+  }
 }
