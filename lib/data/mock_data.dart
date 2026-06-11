@@ -13,8 +13,8 @@ class MockData {
     connections: 87,
   );
 
-  static List<Post> posts() => const [
-        Post(
+  static List<Post> posts() => [
+        const Post(
           id: 'e2',
           type: PostType.event,
           title: 'ALU Entrepreneurship Pitch Night',
@@ -30,7 +30,7 @@ class MockData {
           interestedCount: 31,
           featured: true,
         ),
-        Post(
+        const Post(
           id: 'e1',
           type: PostType.event,
           title: 'AI for Social Impact Workshop',
@@ -45,7 +45,7 @@ class MockData {
           goingCount: 48,
           interestedCount: 12,
         ),
-        Post(
+        const Post(
           id: 'e3',
           type: PostType.event,
           title: 'Design Thinking Bootcamp',
@@ -60,7 +60,7 @@ class MockData {
           goingCount: 22,
           interestedCount: 40,
         ),
-        Post(
+        const Post(
           id: 'e4',
           type: PostType.event,
           title: 'Community Clean Up',
@@ -75,7 +75,7 @@ class MockData {
           goingCount: 35,
           interestedCount: 9,
         ),
-        Post(
+        const Post(
           id: 'e5',
           type: PostType.event,
           title: 'ALU Climate Action Week',
@@ -90,7 +90,7 @@ class MockData {
           goingCount: 120,
           interestedCount: 80,
         ),
-        Post(
+        const Post(
           id: 'e6',
           type: PostType.event,
           title: 'Build Your First MVP Workshop',
@@ -105,7 +105,7 @@ class MockData {
           goingCount: 18,
           interestedCount: 27,
         ),
-        Post(
+        const Post(
           id: 'o1',
           type: PostType.opportunity,
           title: 'Sustainable Solutions Challenge',
@@ -119,7 +119,7 @@ class MockData {
           coverGradient: [AppColors.green, AppColors.blue],
           deadlineLabel: 'Apply by May 20, 2026',
         ),
-        Post(
+        const Post(
           id: 'o2',
           type: PostType.opportunity,
           title: 'Campus Ambassador Program',
@@ -133,7 +133,7 @@ class MockData {
           coverGradient: [AppColors.purple, AppColors.pink],
           deadlineLabel: 'Apply by May 22, 2026',
         ),
-        Post(
+        const Post(
           id: 'o3',
           type: PostType.opportunity,
           title: 'Summer Internship: Fintech Kigali',
@@ -297,8 +297,8 @@ class MockData {
           lastMessagePreview: 'Fatima: Shared a file',
           time: '9:45 AM',
           unread: 2,
-          messages: const [
-            Message(
+          messages: [
+            const Message(
                 id: 'm1',
                 sender: 'Fatima',
                 text:
@@ -306,20 +306,20 @@ class MockData {
                 time: '9:15 AM',
                 reactions: 4,
                 reactionEmoji: '\u2764\uFE0F'),
-            Message(
+            const Message(
                 id: 'm2',
                 sender: 'David',
                 text: "Got it! I'll bring my laptop.",
                 time: '9:18 AM',
                 reactions: 2,
                 reactionEmoji: '\uD83D\uDC4D'),
-            Message(
+            const Message(
                 id: 'm3',
                 sender: 'Aline Umuhoza',
                 text: "Can't wait! \uD83D\uDD25",
                 time: '9:20 AM',
                 isMe: true),
-            Message(
+            const Message(
                 id: 'm4',
                 sender: 'Jean',
                 text: 'Workshop Materials.pdf',
@@ -337,8 +337,8 @@ class MockData {
           lastMessagePreview: "David: Don't forget the meeting",
           time: '10:30 AM',
           unread: 3,
-          messages: const [
-            Message(
+          messages: [
+            const Message(
                 id: 'm5',
                 sender: 'David',
                 text: "Don't forget the meeting this Friday.",
@@ -353,8 +353,8 @@ class MockData {
           color: AppColors.blue,
           lastMessagePreview: 'Jean: See you there!',
           time: 'Yesterday',
-          messages: const [
-            Message(
+          messages: [
+            const Message(
                 id: 'm6', sender: 'Jean', text: 'See you there!', time: 'Yesterday'),
           ],
         ),
@@ -366,8 +366,8 @@ class MockData {
           color: AppColors.pink,
           lastMessagePreview: 'Sarah: Any updates?',
           time: 'Yesterday',
-          messages: const [
-            Message(
+          messages: [
+            const Message(
                 id: 'm7', sender: 'Sarah', text: 'Any updates?', time: 'Yesterday'),
           ],
         ),
@@ -379,8 +379,8 @@ class MockData {
           color: AppColors.emerald,
           lastMessagePreview: 'Emmanuel: Great job!',
           time: '2d ago',
-          messages: const [
-            Message(
+          messages: [
+            const Message(
                 id: 'm8',
                 sender: 'Emmanuel',
                 text: 'Great job everyone!',

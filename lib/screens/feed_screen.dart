@@ -16,86 +16,109 @@ class FeedScreen extends StatelessWidget {
     final entries = state.feedEntries;
 
     return Scaffold(
-      backgroundColor: AppColors.bg,
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            floating: true,
-            snap: true,
-            backgroundColor: AppColors.surface,
-            surfaceTintColor: Colors.transparent,
-            title: const Text('Campus Feed'),
-            bottom: PreferredSize(
-              preferredSize: const Size.fromHeight(1),
-              child: Divider(height: 1, color: AppColors.border),
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: _ComposePrompt(user: state.currentUser),
-          ),
-          if (entries.isEmpty)
-            SliverFillRemaining(
-              hasScrollBody: false,
-              child: EmptyState(
-                icon: Icons.dynamic_feed_rounded,
-                message: 'No posts yet.\nBe the first to share!',
-              ),
-            )
-          else
-            SliverPadding(
-              padding: const EdgeInsets.only(bottom: 100),
-              sliver: SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (ctx, i) => _FeedCard(entry: entries[i]),
-                  childCount: entries.length,
-                ),
-              ),
-            ),
-        ],
-      ),
-    );
-  }
-}
-
-class _ComposePrompt extends StatelessWidget {
-  final AppUser user;
-  const _ComposePrompt({required this.user});
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => const CreateFeedPostScreen()),
-      ),
-      child: Container(
-        margin: const EdgeInsets.fromLTRB(16, 12, 16, 4),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-        decoration: BoxDecoration(
-          color: AppColors.surface,
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: AppColors.border),
-        ),
-        child: Row(
+      backgroundColor: AppColors.dark,
+      body: SafeArea(
+        bottom: false,
+        child: Column(
           children: [
-            Avatar(name: user.name, color: user.color, size: 36),
-            const SizedBox(width: 12),
+            // ── Dark header ──────────────────────────────────────
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 14, 20, 18),
+              child: Row(
+                children: [
+                  const Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Campus Feed',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 22,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                        SizedBox(height: 2),
+                        Text(
+                          'Share experiences & events',
+                          style: TextStyle(
+                            color: Colors.white54,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  _DarkIconBtn(
+                    icon: Icons.edit_outlined,
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => const CreateFeedPostScreen()),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            // ── White rounded body ───────────────────────────────
             Expanded(
-              child: Text(
-                'Share an experience or promote an event…',
-                style: const TextStyle(
-                  color: AppColors.textSecondary,
-                  fontSize: 14,
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: AppColors.bg,
+                  borderRadius:
+                      BorderRadius.vertical(top: Radius.circular(28)),
+                ),
+                child: ClipRRect(
+                  borderRadius:
+                      const BorderRadius.vertical(top: Radius.circular(28)),
+                  child: entries.isEmpty
+                      ? const Center(
+                          child: EmptyState(
+                            icon: Icons.dynamic_feed_rounded,
+                            message: 'No posts yet.\nBe the first to share!',
+                          ),
+                        )
+                      : ListView.builder(
+                          padding: const EdgeInsets.fromLTRB(0, 12, 0, 100),
+                          itemCount: entries.length,
+                          itemBuilder: (ctx, i) =>
+                              _FeedCard(entry: entries[i]),
+                        ),
                 ),
               ),
             ),
-            const Icon(Icons.edit_outlined, size: 18, color: AppColors.emerald),
           ],
         ),
       ),
     );
   }
 }
+
+// ── Shared dark icon button ───────────────────────────────────────────────────
+
+class _DarkIconBtn extends StatelessWidget {
+  final IconData icon;
+  final VoidCallback? onTap;
+  const _DarkIconBtn({required this.icon, this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 38,
+        height: 38,
+        decoration: BoxDecoration(
+          color: Colors.white.withValues(alpha: 0.1),
+          shape: BoxShape.circle,
+        ),
+        child: Icon(icon, color: Colors.white, size: 20),
+      ),
+    );
+  }
+}
+
+// ── Feed card ─────────────────────────────────────────────────────────────────
 
 class _FeedCard extends StatelessWidget {
   final FeedEntry entry;
@@ -104,16 +127,13 @@ class _FeedCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+      margin: const EdgeInsets.fromLTRB(16, 4, 16, 8),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
+        borderRadius: BorderRadius.circular(18),
+        boxShadow: const [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
+              color: Color(0x08000000), blurRadius: 10, offset: Offset(0, 2)),
         ],
       ),
       child: Column(
@@ -125,14 +145,13 @@ class _FeedCard extends StatelessWidget {
             child: Text(
               entry.content,
               style: const TextStyle(
-                fontSize: 14.5,
-                color: AppColors.textPrimary,
-                height: 1.5,
-              ),
+                  fontSize: 14.5,
+                  color: AppColors.textPrimary,
+                  height: 1.5),
             ),
           ),
           if (entry.linkedEventTitle != null) _MiniEventCard(entry: entry),
-          Divider(height: 1, thickness: 0.5, color: AppColors.border),
+          const Divider(height: 1, thickness: 0.5, color: AppColors.border),
           _ActionRow(entry: entry),
         ],
       ),
@@ -167,10 +186,9 @@ class _CardHeader extends StatelessWidget {
                       child: Text(
                         entry.authorName,
                         style: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14,
-                          color: AppColors.textPrimary,
-                        ),
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                            color: AppColors.textPrimary),
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
@@ -185,22 +203,17 @@ class _CardHeader extends StatelessWidget {
                       child: Text(
                         badgeLabel,
                         style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w600,
-                          color: badgeColor,
-                        ),
+                            fontSize: 11,
+                            fontWeight: FontWeight.w600,
+                            color: badgeColor),
                       ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 2),
-                Text(
-                  entry.timeAgo,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: AppColors.textSecondary,
-                  ),
-                ),
+                Text(entry.timeAgo,
+                    style: const TextStyle(
+                        fontSize: 12, color: AppColors.textSecondary)),
               ],
             ),
           ),
@@ -231,7 +244,7 @@ class _MiniEventCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Container(
-                width: 6,
+                width: 5,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
@@ -250,47 +263,38 @@ class _MiniEventCard extends StatelessWidget {
                       Text(
                         entry.linkedEventTitle!,
                         style: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 13,
-                          color: AppColors.textPrimary,
-                        ),
+                            fontWeight: FontWeight.w600,
+                            fontSize: 13,
+                            color: AppColors.textPrimary),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 4),
-                      Row(
-                        children: [
-                          const Icon(Icons.calendar_today_outlined,
-                              size: 11, color: AppColors.textSecondary),
-                          const SizedBox(width: 4),
-                          Expanded(
-                            child: Text(
-                              entry.linkedEventDate ?? '',
+                      const SizedBox(height: 3),
+                      Row(children: [
+                        const Icon(Icons.calendar_today_outlined,
+                            size: 11, color: AppColors.textSecondary),
+                        const SizedBox(width: 4),
+                        Expanded(
+                          child: Text(entry.linkedEventDate ?? '',
                               style: const TextStyle(
                                   fontSize: 12,
                                   color: AppColors.textSecondary),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
-                      ),
+                              overflow: TextOverflow.ellipsis),
+                        ),
+                      ]),
                       const SizedBox(height: 2),
-                      Row(
-                        children: [
-                          const Icon(Icons.location_on_outlined,
-                              size: 11, color: AppColors.textSecondary),
-                          const SizedBox(width: 4),
-                          Expanded(
-                            child: Text(
-                              entry.linkedEventLocation ?? '',
+                      Row(children: [
+                        const Icon(Icons.location_on_outlined,
+                            size: 11, color: AppColors.textSecondary),
+                        const SizedBox(width: 4),
+                        Expanded(
+                          child: Text(entry.linkedEventLocation ?? '',
                               style: const TextStyle(
                                   fontSize: 12,
                                   color: AppColors.textSecondary),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
-                      ),
+                              overflow: TextOverflow.ellipsis),
+                        ),
+                      ]),
                     ],
                   ),
                 ),
@@ -331,20 +335,17 @@ class _ActionRow extends StatelessWidget {
                   : Icons.favorite_border_rounded,
               size: 18,
             ),
-            label: Text(
-              '${live.likes}',
-              style: const TextStyle(fontSize: 13),
-            ),
-            onPressed: () => context.read<AppState>().toggleFeedLike(live.id),
+            label: Text('${live.likes}',
+                style: const TextStyle(fontSize: 13)),
+            onPressed: () =>
+                context.read<AppState>().toggleFeedLike(live.id),
           ),
           TextButton.icon(
             style: TextButton.styleFrom(
                 foregroundColor: AppColors.textSecondary),
             icon: const Icon(Icons.chat_bubble_outline_rounded, size: 18),
-            label: Text(
-              '${live.comments.length}',
-              style: const TextStyle(fontSize: 13),
-            ),
+            label: Text('${live.comments.length}',
+                style: const TextStyle(fontSize: 13)),
             onPressed: () => _showComments(context, live),
           ),
         ],
@@ -358,7 +359,7 @@ class _ActionRow extends StatelessWidget {
       isScrollControlled: true,
       backgroundColor: AppColors.surface,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       builder: (_) => _CommentsSheet(entryId: live.id),
     );
@@ -392,7 +393,8 @@ class _CommentsSheetState extends State<_CommentsSheet> {
   @override
   Widget build(BuildContext context) {
     final state = context.watch<AppState>();
-    final entry = state.feedEntries.firstWhere((e) => e.id == widget.entryId);
+    final entry =
+        state.feedEntries.firstWhere((e) => e.id == widget.entryId);
     final bottomInset = MediaQuery.viewInsetsOf(context).bottom;
 
     return Padding(
@@ -424,49 +426,41 @@ class _CommentsSheetState extends State<_CommentsSheet> {
           if (entry.comments.isEmpty)
             const Padding(
               padding: EdgeInsets.symmetric(vertical: 24),
-              child: Text(
-                'No comments yet. Be the first!',
-                style: TextStyle(color: AppColors.textSecondary),
-              ),
+              child: Text('No comments yet. Be the first!',
+                  style: TextStyle(color: AppColors.textSecondary)),
             )
           else
             ConstrainedBox(
               constraints: BoxConstraints(
-                maxHeight: MediaQuery.sizeOf(context).height * 0.4,
-              ),
+                  maxHeight: MediaQuery.sizeOf(context).height * 0.4),
               child: ListView.builder(
                 shrinkWrap: true,
                 itemCount: entry.comments.length,
                 itemBuilder: (ctx, i) {
                   final c = entry.comments[i];
                   return ListTile(
-                    leading:
-                        Avatar(name: c.authorName, color: c.authorColor, size: 36),
-                    title: Row(
-                      children: [
-                        Text(
-                          c.authorName,
+                    leading: Avatar(
+                        name: c.authorName,
+                        color: c.authorColor,
+                        size: 36),
+                    title: Row(children: [
+                      Text(c.authorName,
                           style: const TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 13),
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          c.timeAgo,
+                              fontWeight: FontWeight.w600, fontSize: 13)),
+                      const SizedBox(width: 8),
+                      Text(c.timeAgo,
                           style: const TextStyle(
-                              fontSize: 11, color: AppColors.textSecondary),
-                        ),
-                      ],
-                    ),
-                    subtitle: Text(
-                      c.text,
-                      style: const TextStyle(
-                          fontSize: 13, color: AppColors.textPrimary),
-                    ),
+                              fontSize: 11,
+                              color: AppColors.textSecondary)),
+                    ]),
+                    subtitle: Text(c.text,
+                        style: const TextStyle(
+                            fontSize: 13, color: AppColors.textPrimary)),
                   );
                 },
               ),
             ),
-          Divider(height: 1, color: AppColors.border),
+          const Divider(height: 1, color: AppColors.border),
           Padding(
             padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
             child: Row(
@@ -489,11 +483,13 @@ class _CommentsSheetState extends State<_CommentsSheet> {
                       isDense: true,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20),
-                        borderSide: const BorderSide(color: AppColors.border),
+                        borderSide:
+                            const BorderSide(color: AppColors.border),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20),
-                        borderSide: const BorderSide(color: AppColors.border),
+                        borderSide:
+                            const BorderSide(color: AppColors.border),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
+  static const dark = Color(0xFF0D1117);
   static const bg = Color(0xFFEFF6FF);
   static const surface = Color(0xFFFFFFFF);
   static const surfaceAlt = Color(0xFFE0EFFE);
@@ -60,11 +61,20 @@ class AppTheme {
         ),
       ),
       navigationBarTheme: NavigationBarThemeData(
-        backgroundColor: AppColors.surface,
-        indicatorColor: AppColors.emerald.withValues(alpha: 0.12),
+        backgroundColor: AppColors.dark,
+        indicatorColor: AppColors.emerald.withValues(alpha: 0.18),
         elevation: 0,
         surfaceTintColor: Colors.transparent,
         shadowColor: Colors.transparent,
+        labelTextStyle: WidgetStateProperty.resolveWith((states) {
+          final selected = states.contains(WidgetState.selected);
+          return TextStyle(
+            color: selected ? AppColors.emerald : Colors.white54,
+            fontSize: 11,
+            fontWeight:
+                selected ? FontWeight.w600 : FontWeight.normal,
+          );
+        }),
       ),
       textTheme: base.textTheme.apply(
         bodyColor: AppColors.textPrimary,

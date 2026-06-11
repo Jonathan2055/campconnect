@@ -42,47 +42,99 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<AppState>(); // rebuild when a new message is added
+    context.watch<AppState>();
     final thread = widget.thread;
 
     return Scaffold(
-      appBar: AppBar(
-        leading: const BackButton(),
-        titleSpacing: 0,
-        title: Row(
-          children: [
-            Avatar(name: thread.name, color: thread.color, size: 36),
-            const SizedBox(width: 10),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(thread.name,
-                    style: const TextStyle(
-                        fontSize: 15, fontWeight: FontWeight.w700)),
-                if (thread.isGroup)
-                  Text('${thread.membersCount} members',
-                      style: const TextStyle(
-                          fontSize: 11, color: AppColors.textSecondary)),
-              ],
-            ),
-          ],
-        ),
-        actions: const [Icon(Icons.more_vert), SizedBox(width: 12)],
-      ),
+      backgroundColor: AppColors.dark,
       body: SafeArea(
-        top: false,
+        bottom: false,
         child: Column(
           children: [
-            Expanded(
-              child: ListView.builder(
-                controller: _scroll,
-                padding: const EdgeInsets.all(16),
-                itemCount: thread.messages.length,
-                itemBuilder: (_, i) => _bubble(thread.messages[i]),
+            // ── Dark header ──────────────────────────────────────
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 14),
+              child: Row(
+                children: [
+                  GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: Container(
+                      width: 38,
+                      height: 38,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.1),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(Icons.arrow_back_rounded,
+                          color: Colors.white, size: 20),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Avatar(
+                      name: thread.name, color: thread.color, size: 38),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          thread.name,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        if (thread.isGroup)
+                          Text(
+                            '${thread.membersCount} members',
+                            style: const TextStyle(
+                                color: Colors.white54, fontSize: 11),
+                          ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    width: 38,
+                    height: 38,
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.1),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(Icons.more_vert_rounded,
+                        color: Colors.white, size: 20),
+                  ),
+                ],
               ),
             ),
-            _composer(),
+            // ── White rounded body ───────────────────────────────
+            Expanded(
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: AppColors.bg,
+                  borderRadius:
+                      BorderRadius.vertical(top: Radius.circular(28)),
+                ),
+                child: ClipRRect(
+                  borderRadius:
+                      const BorderRadius.vertical(top: Radius.circular(28)),
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: ListView.builder(
+                          controller: _scroll,
+                          padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                          itemCount: thread.messages.length,
+                          itemBuilder: (_, i) =>
+                              _bubble(thread.messages[i]),
+                        ),
+                      ),
+                      _composer(),
+                    ],
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -90,9 +142,11 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
   }
 
   Widget _bubble(Message m) {
-    final align = m.isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start;
+    final align =
+        m.isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start;
     final bubbleColor = m.isMe ? AppColors.emerald : AppColors.surface;
-    final textColor = m.isMe ? AppColors.onEmerald : AppColors.textPrimary;
+    final textColor =
+        m.isMe ? AppColors.onEmerald : AppColors.textPrimary;
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 14),
@@ -102,11 +156,13 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
           if (!m.isMe)
             Padding(
               padding: const EdgeInsets.only(left: 4, bottom: 4),
-              child: Text(m.sender,
-                  style: const TextStyle(
-                      color: AppColors.textSecondary,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600)),
+              child: Text(
+                m.sender,
+                style: const TextStyle(
+                    color: AppColors.textSecondary,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600),
+              ),
             ),
           Container(
             constraints: BoxConstraints(
@@ -121,12 +177,20 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                 bottomLeft: Radius.circular(m.isMe ? 16 : 4),
                 bottomRight: Radius.circular(m.isMe ? 4 : 16),
               ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.06),
+                  blurRadius: 6,
+                  offset: const Offset(0, 2),
+                ),
+              ],
             ),
             child: m.attachmentName != null
                 ? Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.insert_drive_file, color: textColor),
+                      Icon(Icons.insert_drive_file_rounded,
+                          color: textColor),
                       const SizedBox(width: 8),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -152,7 +216,8 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 if (m.reactions > 0) ...[
-                  Text('${m.reactionEmoji ?? '\uD83D\uDC4D'} ${m.reactions}',
+                  Text(
+                      '${m.reactionEmoji ?? '👍'} ${m.reactions}',
                       style: const TextStyle(fontSize: 12)),
                   const SizedBox(width: 6),
                 ],
@@ -169,8 +234,11 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
 
   Widget _composer() {
     return Container(
-      padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
-      color: AppColors.surface,
+      padding: const EdgeInsets.fromLTRB(12, 8, 12, 20),
+      decoration: const BoxDecoration(
+        color: AppColors.surface,
+        border: Border(top: BorderSide(color: AppColors.border)),
+      ),
       child: Row(
         children: [
           Expanded(
@@ -178,19 +246,20 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
               controller: _controller,
               textInputAction: TextInputAction.send,
               onSubmitted: (_) => _send(),
-              decoration:
-                  const InputDecoration(hintText: 'Type a message...'),
+              decoration: const InputDecoration(
+                  hintText: 'Type a message…'),
             ),
           ),
           const SizedBox(width: 8),
           GestureDetector(
             onTap: _send,
             child: Container(
-              width: 48,
-              height: 48,
+              width: 46,
+              height: 46,
               decoration: const BoxDecoration(
                   color: AppColors.emerald, shape: BoxShape.circle),
-              child: const Icon(Icons.send, color: AppColors.onEmerald),
+              child: const Icon(Icons.send_rounded,
+                  color: AppColors.onEmerald, size: 20),
             ),
           ),
         ],

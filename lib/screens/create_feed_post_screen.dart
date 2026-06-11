@@ -57,7 +57,8 @@ class _CreateFeedPostScreenState extends State<CreateFeedPostScreen> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (_) => _EventPickerSheet(posts: posts, selected: _selectedEvent),
+      builder: (_) =>
+          _EventPickerSheet(posts: posts, selected: _selectedEvent),
     );
     if (picked != null) setState(() => _selectedEvent = picked);
   }
@@ -68,148 +69,210 @@ class _CreateFeedPostScreenState extends State<CreateFeedPostScreen> {
     final user = state.currentUser;
 
     return Scaffold(
-      backgroundColor: AppColors.surface,
-      appBar: AppBar(
-        backgroundColor: AppColors.surface,
-        leading: TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: const Text(
-            'Cancel',
-            style: TextStyle(color: AppColors.textSecondary),
-          ),
-        ),
-        leadingWidth: 80,
-        title: const Text('Share on Feed'),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 12),
-            child: ListenableBuilder(
-              listenable: _contentController,
-              builder: (ctx, _) => FilledButton(
-                style: FilledButton.styleFrom(
-                  backgroundColor:
-                      _canSubmit ? AppColors.emerald : AppColors.border,
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 18, vertical: 0),
-                  minimumSize: const Size(64, 36),
-                ),
-                onPressed: _canSubmit ? _submit : null,
-                child: const Text('Post',
-                    style: TextStyle(fontWeight: FontWeight.bold)),
-              ),
-            ),
-          ),
-        ],
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Divider(height: 1, color: AppColors.border),
-          // Type selector
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 14, 16, 0),
-            child: Row(
-              children: [
-                _TypeChip(
-                  label: 'Experience',
-                  icon: Icons.star_outline_rounded,
-                  selected: _type == FeedEntryType.experience,
-                  color: AppColors.emerald,
-                  onTap: () => setState(() {
-                    _type = FeedEntryType.experience;
-                    _selectedEvent = null;
-                  }),
-                ),
-                const SizedBox(width: 10),
-                _TypeChip(
-                  label: 'Promote Event',
-                  icon: Icons.campaign_outlined,
-                  selected: _type == FeedEntryType.promotion,
-                  color: AppColors.purple,
-                  onTap: () => setState(() => _type = FeedEntryType.promotion),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 14),
-          // Author row
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              children: [
-                Avatar(name: user.name, color: user.color, size: 40),
-                const SizedBox(width: 10),
-                Text(
-                  user.name,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w600, fontSize: 14),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 10),
-          // Content field
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: TextField(
-                controller: _contentController,
-                maxLines: null,
-                expands: true,
-                autofocus: true,
-                textAlignVertical: TextAlignVertical.top,
-                decoration: InputDecoration(
-                  hintText: _type == FeedEntryType.experience
-                      ? 'Share your experience at an event…'
-                      : 'Tell people about this event…',
-                  hintStyle: const TextStyle(
-                      color: AppColors.textSecondary, fontSize: 15),
-                  border: InputBorder.none,
-                  enabledBorder: InputBorder.none,
-                  focusedBorder: InputBorder.none,
-                  filled: false,
-                ),
-                style: const TextStyle(
-                    fontSize: 15, color: AppColors.textPrimary, height: 1.5),
-                onChanged: (_) => setState(() {}),
-              ),
-            ),
-          ),
-          // Selected event preview
-          if (_selectedEvent != null)
+      backgroundColor: AppColors.dark,
+      body: SafeArea(
+        bottom: false,
+        child: Column(
+          children: [
+            // ── Dark header ──────────────────────────────────────
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-              child: _SelectedEventPreview(
-                post: _selectedEvent!,
-                onRemove: () => setState(() => _selectedEvent = null),
+              padding: const EdgeInsets.fromLTRB(16, 12, 20, 18),
+              child: Row(
+                children: [
+                  GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: Container(
+                      width: 38,
+                      height: 38,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.1),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(Icons.close_rounded,
+                          color: Colors.white, size: 20),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  const Expanded(
+                    child: Text(
+                      'Share on Feed',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  ),
+                  // Post button
+                  ListenableBuilder(
+                    listenable: _contentController,
+                    builder: (_, __) => GestureDetector(
+                      onTap: _canSubmit ? _submit : null,
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 150),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 18, vertical: 9),
+                        decoration: BoxDecoration(
+                          color: _canSubmit
+                              ? AppColors.emerald
+                              : Colors.white.withValues(alpha: 0.15),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Text(
+                          'Post',
+                          style: TextStyle(
+                            color: _canSubmit
+                                ? AppColors.onEmerald
+                                : Colors.white.withValues(alpha: 0.5),
+                            fontWeight: FontWeight.w700,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-          // Bottom toolbar
-          Container(
-            padding: const EdgeInsets.fromLTRB(12, 8, 12, 28),
-            decoration: BoxDecoration(
-              color: AppColors.surface,
-              border: Border(top: BorderSide(color: AppColors.border)),
-            ),
-            child: Row(
-              children: [
-                if (_type == FeedEntryType.promotion)
-                  TextButton.icon(
-                    style: TextButton.styleFrom(
-                        foregroundColor: AppColors.purple),
-                    icon: const Icon(Icons.event_outlined, size: 18),
-                    label: Text(_selectedEvent == null
-                        ? 'Tag an Event'
-                        : 'Change Event'),
-                    onPressed: () => _pickEvent(state.posts),
+            // ── White rounded body ───────────────────────────────
+            Expanded(
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: AppColors.bg,
+                  borderRadius:
+                      BorderRadius.vertical(top: Radius.circular(28)),
+                ),
+                child: ClipRRect(
+                  borderRadius:
+                      const BorderRadius.vertical(top: Radius.circular(28)),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Type chips
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 18, 16, 0),
+                        child: Row(
+                          children: [
+                            _TypeChip(
+                              label: 'Experience',
+                              icon: Icons.star_outline_rounded,
+                              selected: _type == FeedEntryType.experience,
+                              color: AppColors.emerald,
+                              onTap: () => setState(() {
+                                _type = FeedEntryType.experience;
+                                _selectedEvent = null;
+                              }),
+                            ),
+                            const SizedBox(width: 10),
+                            _TypeChip(
+                              label: 'Promote Event',
+                              icon: Icons.campaign_outlined,
+                              selected: _type == FeedEntryType.promotion,
+                              color: AppColors.purple,
+                              onTap: () => setState(
+                                  () => _type = FeedEntryType.promotion),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      // Author row
+                      Padding(
+                        padding:
+                            const EdgeInsets.symmetric(horizontal: 16),
+                        child: Row(
+                          children: [
+                            Avatar(
+                                name: user.name,
+                                color: user.color,
+                                size: 40),
+                            const SizedBox(width: 10),
+                            Text(
+                              user.name,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      // Text field
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16),
+                          child: TextField(
+                            controller: _contentController,
+                            maxLines: null,
+                            expands: true,
+                            autofocus: true,
+                            textAlignVertical: TextAlignVertical.top,
+                            decoration: InputDecoration(
+                              hintText:
+                                  _type == FeedEntryType.experience
+                                      ? 'Share your experience at an event…'
+                                      : 'Tell people about this event…',
+                              hintStyle: const TextStyle(
+                                  color: AppColors.textSecondary,
+                                  fontSize: 15),
+                              border: InputBorder.none,
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              filled: false,
+                            ),
+                            style: const TextStyle(
+                                fontSize: 15,
+                                color: AppColors.textPrimary,
+                                height: 1.5),
+                            onChanged: (_) => setState(() {}),
+                          ),
+                        ),
+                      ),
+                      // Selected event preview
+                      if (_selectedEvent != null)
+                        Padding(
+                          padding:
+                              const EdgeInsets.fromLTRB(16, 0, 16, 8),
+                          child: _SelectedEventPreview(
+                            post: _selectedEvent!,
+                            onRemove: () =>
+                                setState(() => _selectedEvent = null),
+                          ),
+                        ),
+                      // Bottom toolbar
+                      Container(
+                        padding:
+                            const EdgeInsets.fromLTRB(12, 8, 12, 28),
+                        decoration: const BoxDecoration(
+                          color: AppColors.surface,
+                          border: Border(
+                              top: BorderSide(color: AppColors.border)),
+                        ),
+                        child: Row(
+                          children: [
+                            if (_type == FeedEntryType.promotion)
+                              TextButton.icon(
+                                style: TextButton.styleFrom(
+                                    foregroundColor: AppColors.purple),
+                                icon: const Icon(Icons.event_outlined,
+                                    size: 18),
+                                label: Text(_selectedEvent == null
+                                    ? 'Tag an Event'
+                                    : 'Change Event'),
+                                onPressed: () =>
+                                    _pickEvent(state.posts),
+                              ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-              ],
+                ),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -239,7 +302,9 @@ class _TypeChip extends StatelessWidget {
         padding:
             const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
         decoration: BoxDecoration(
-          color: selected ? color.withValues(alpha: 0.1) : Colors.transparent,
+          color: selected
+              ? color.withValues(alpha: 0.1)
+              : Colors.transparent,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color: selected ? color : AppColors.border,
